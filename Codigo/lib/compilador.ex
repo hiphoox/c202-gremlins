@@ -18,7 +18,7 @@ defmodule Compilador do
      if path =~ ".c" and File.exists?(path) do
        IO.puts "Valid path" <> path
        #envío de la ruta y bandera al orquestador
-       Orquestador.manager(File.read!(path), path, flag_or_name);
+       #Orquestador.manager(File.read!(path), path, flag_or_name);
       else
         errors(3) |> IO.puts;
         errors(3);
@@ -28,8 +28,8 @@ defmodule Compilador do
    def help() do
      "
      Uso:\n ./twscc_compilador_c nombre del archivo.c | [option] nombre del archivo.c\n
-     \b -t      Muestra en pantalla la lista de tokens.
-     \b -a      Muestra el Árbol Sintáctico Abstracto.
+     \b -t      Muestra la lista de tokens.
+     \b -a      Muestra el Árbol Sintáctico .
      \b -s      Genera el código fuente del ensamblador (x86).
      \b -o [nombre del archivo] [nombre_ejecutable] Especifica el nombre del ejecutable a generar.
      "

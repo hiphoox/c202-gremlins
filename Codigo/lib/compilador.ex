@@ -18,7 +18,7 @@ defmodule Compilador do
      if path =~ ".c" and File.exists?(path) do
        IO.puts "Valid path" <> path
        #envío de la ruta y bandera al orquestador
-       #Orquestador.manager(File.read!(path), path, flag_or_name);
+       Orquestador.manager(File.read!(path), path, flag_or_name);
       else
         errors(3) |> IO.puts;
         errors(3);

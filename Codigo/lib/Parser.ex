@@ -48,7 +48,7 @@ defmodule Parser do
         #Parseando expresión completa
         case tokens do #case 2
           {:error, _} -> [tokens, ""]
-          _-> [tokens, exp_node] = parse_constant(tokens)
+          _-> [tokens, exp_node] = parse_constant(tokens, :constant)
               #Finalizando, revisa si existe el ;
               {_atom, _value, tokens} = parse(tokens, :semicolon)
               case tokens do #case 3

@@ -27,10 +27,10 @@ defmodule Compilador do
 
    def help() do
      "
-     Uso:\n ./twscc_compilador_c nombre del archivo.c | [option] nombre del archivo.c\n
-     \b -t      Muestra la lista de tokens.
-     \b -a      Muestra el Árbol Sintáctico .
-     \b -s      Genera el código fuente del ensamblador (x86).
+     Uso:\n ./gremlis-compiler nombre del archivo.c | [option] nombre del archivo.c\n
+     \b -t      Muestra Tokens.
+     \b -a      Muestra el Árbol Sintáctico.
+     \b -s      Genera el código en ensamblador (x86).
      \b -o [nombre del archivo] [nombre_ejecutable] Especifica el nombre del ejecutable a generar.
      "
    end
@@ -41,10 +41,6 @@ defmodule Compilador do
         2 -> "Comando(s) no válido. Escriba -h para la ayuda." #mensaje de error
         3 -> "Archivo inválido o no existe en el directorio." #mensaje de archivo inexistente
       end
-    end
-
-    def hello() do
-        IO.puts "Hello world"
     end
 
 end

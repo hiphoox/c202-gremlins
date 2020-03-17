@@ -18,9 +18,9 @@ defmodule Parser do
       {_atom, _value, tokens} = parse(tokens, :open_par)
       {_atom, _value, tokens} = parse(tokens, :close_par)
       {_atom, _value, tokens} = parse(tokens, :open_brace)
-     
-      [tokens, state_node] = parse_statement(tokens)
-      
+      {_atom, _value, tokens} = parse(tokens, :return)
+      {_atom, _value, tokens} = parse_constant(tokens, :constant)
+      {_atom, _value, tokens} = parse(tokens, :semicolon)
       {_atom, _value, tokens} = parse(tokens, :close_brace)
       
       case tokens do
@@ -39,6 +39,18 @@ defmodule Parser do
              else
                 {"", "", {:error, "Error de sintáxis. Se esperaba "<> dicc(atom) <>" y se encontró: " <> dicc(List.first(token))}}
              end
+      end
+    end
+
+     def parse_constant(token, atom) do
+      #¿Token trae tupla error en vez de la lista? devuelvela tal como está.
+      case token do
+        {:error, _} -> {"", "", token}; #envia null porque solo te interesa propagar tokens
+        _ -> if elem(List.first(token), 0) == atom do
+                [Enum.drop(token, 1), {elem(List.first(token),0), elem(List.first(token),1),{},{}}]
+             else
+                #{"", "", {:error, "Error de sintáxis. Constante inválida."}}
+            end
       end
     end
 

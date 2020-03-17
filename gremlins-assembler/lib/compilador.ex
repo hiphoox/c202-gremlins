@@ -17,8 +17,8 @@ defmodule Compilador do
    def compile(path, flag_or_name) do
      if path =~ ".c" and File.exists?(path) do
        IO.puts "Valid path" <> path
-       #Llamamos al orquestador
-       Orquestador.manager(File.read!(path), path, flag_or_name);
+       #Llamamos al organizador
+       Organizer.manager(File.read!(path), path, flag_or_name);
       else
         errors(3) |> IO.puts;
         errors(3);

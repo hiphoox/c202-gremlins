@@ -7,13 +7,13 @@ defmodule LexerTest do
      tokens: {:ok, [
        :int_Reserveword,
        :main_Reserveword,
-       :open_brace,
-       :close_brace,
        :open_par,
+       :close_par,
+       :open_brace,
        :return_Reserveword,
        {:constant, 2},
        :semicolon,
-       :close_par
+       :close_brace
      ]}}
   end
 
@@ -37,11 +37,11 @@ defmodule LexerTest do
     assert Lexer.scan_word(File.read!("test/codigoc/sinespacios.c"), :no_output) == {:ok, [
       :int_Reserveword,
       :main_Reserveword,
-      :open_brace,
-      :close_brace,
+      :open_par,
+      :close_par,
       :open_brace,
       :return_Reserveword,
-      {:constant, 0},
+      {:constant, 2},
       :semicolon,
       :close_brace]}
   end
@@ -52,12 +52,12 @@ defmodule LexerTest do
 
   test "Prueba 3 de Nora Sandler:" do
     assert Lexer.scan_word(File.read!("test/codigoc/return0.c"), :no_output) == {:ok,[
-      :int_Keyword,
-      :main_Keyword,
-      :open_paren,
-      :close_paren,
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
       :open_brace,
-      :return_Keyword,
+      :return_Reserveword,
       {:constant, 0},
       :semicolon,
       :close_brace]}
@@ -67,11 +67,11 @@ defmodule LexerTest do
     assert Lexer.scan_word(File.read!("test/codigoc/sinsaltosdelinea.c"), :no_output) == {:ok, [
       :int_Reserveword,
       :main_Reserveword,
-      :open_brace,
-      :close_brace,
+      :open_par,
+      :close_par,
       :open_brace,
       :return_Reserveword,
-      {:constant, 0},
+      {:constant, 2},
       :semicolon,
       :close_brace]}
   end
@@ -79,9 +79,9 @@ defmodule LexerTest do
   test "Prueba 5 de Nora Sandler" do
     assert Lexer.scan_word(File.read!("test/codigoc/multiplesdigitos.c"), :no_output) == {:ok, [
       :int_Reserveword,
-      :main_Keyword,
-      :open_brace,
-      :close_brace,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
       :open_brace,
       :return_Reserveword,
       {:constant, 100},
@@ -93,11 +93,11 @@ defmodule LexerTest do
     assert Lexer.scan_word(File.read!("test/codigoc/consaltosdelinea.c"), :no_output) == {:ok, [
       :int_Reserveword,
       :main_Reserveword,
-      :open_brace,
-      :close_brace,
+      :open_par,
+      :close_par,
       :open_brace,
       :return_Reserveword,
-      {:constant, 0},
+      {:constant, 2},
       :semicolon,
       :close_brace]}
   end

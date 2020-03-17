@@ -14,7 +14,6 @@ defmodule Lexer do
 
   def start_lexing(words, flag) do
     token_list = Enum.flat_map(words, &lex_raw_tokens/1)
-    IO.puts "Hello Tokens"
     IO.inspect(token_list)
     #s hubo error en la sintaxis, debe de haber un token llamado ":error".
     if Enum.member?(token_list, :error) do

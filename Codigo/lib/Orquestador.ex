@@ -1,6 +1,6 @@
 defmodule Orquestador do
   def manager(file, path, opt) do
-  #Utilizando "with" se procesa el archivo. Si hay error se detiene.
+  #Utilizando "with" se procesa el archivo. Si hay error deja de hacer la compilación.
   with  {:ok, tok} <- Lexer.scan_word(file, opt)
         do
         IO.puts("Finalizó la compilación correctamente.")

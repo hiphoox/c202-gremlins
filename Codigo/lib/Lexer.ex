@@ -1,13 +1,13 @@
 defmodule Lexer do
 
   def scan_word(string, flag) do
-    #Realiza limpieza del código
+    #Realiza scaneo del código con expresiones regulares
     words = Scanner.fix_format(string)
     IO.puts words
     case words do
       [""] -> {:error, "Error. Archivo código fuente vacío."}
-        _ ->  start_lexing(words, flag) #Comienza a generar lista de Tokens
-    #deberá devolver la lista de tokens
+        _ ->  start_lexing(words, flag) #Comenzamos con lista de Tokens
+    #devuelve la lista de tokens en caso de que todo salga bien
     end
   end
 
@@ -15,19 +15,19 @@ defmodule Lexer do
   def start_lexing(words, flag) do
     token_list = Enum.flat_map(words, &lex_raw_tokens/1)
     IO.inspect(token_list)
-    #s hubo error en la sintaxis, debe de haber un token llamado ":error".
+    #Si hubo error, debe de haber un token llamado ":error".
     if Enum.member?(token_list, :error) do
       #Si dicho token no existe, entonces devuelve tupla de error
       {:error, "Error léxico." }
     else
-      #revisa la bandera para mostrar o no en pantalla la lista de tokens
+      #La bandera determina si  mostrara  o no en pantalla la lista de tokens
        if flag == :show_token do
 
         IO.inspect(token_list)
       
-         #Solo mostrar lista de tokens y finalizar ejecución en el orquestador.
+         #Solo mostrar lista de tokens y finalizar ejecución.
          {:only_tokens, token_list}
-      #   {:op_tokens,token_list2}
+     
        else
 
          {:ok, token_list}
@@ -51,7 +51,7 @@ defmodule Lexer do
         
 
         :error -> {:error, nil}
-        #Si no hubo ninguna coincidencia, inserta la cadena error
+        #Si no hubo ninguna coincidencia, inserta el atomo error
         #si se encontró un error, guarda en cadena restante {:error, motivo}
         cadena_restante -> get_constant_chk_error(cadena_restante)
         end
@@ -66,12 +66,12 @@ defmodule Lexer do
     end
 
   def get_constant_chk_error(remain_string) do
-    #Constante o cadena inválida, procesar
+    #Constante o cadena no valida, procesar
     if Regex.run(~r/-?\d+/, remain_string) != nil do
         case Regex.run(~r/\d+/, remain_string) do
            [valor] -> {{:constant, String.to_integer(valor)}, String.trim_leading(remain_string, valor)}
         end
-      else #Si no fue una constante, fue un error. Mostrar en pantalla el string inválido.
+      else #Si no fue una constante. Mostrar en pantalla error , string invalido.
           IO.puts("La palabra " <> remain_string <> " es inválida." )
           {:error, ""}
       end

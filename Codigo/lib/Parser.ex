@@ -18,9 +18,7 @@ defmodule Parser do
       {_atom, _value, tokens} = parse(tokens, :open_par)
       {_atom, _value, tokens} = parse(tokens, :close_par)
       {_atom, _value, tokens} = parse(tokens, :open_brace)
-      {_atom, _value, tokens} = parse(tokens, :return)
-      {_atom, _value, tokens} = parse_constant(tokens, :constant)
-      {_atom, _value, tokens} = parse(tokens, :semicolon)
+      [tokens, state_node] = parse_statement(tokens)
       {_atom, _value, tokens} = parse(tokens, :close_brace)
       
       case tokens do
@@ -40,6 +38,27 @@ defmodule Parser do
                 {"", "", {:error, "Error de sintáxis. Se esperaba "<> dicc(atom) <>" y se encontró: " <> dicc(List.first(token))}}
              end
       end
+    end
+
+    def parse_statement(tokens) do
+      case tokens do #case 1
+        {:error, _} -> [tokens, ""]
+        _-> {atom, _value, tokens} = parse(tokens, :return_Reserveword)
+  
+        #Parseando expresión completa
+        case tokens do #case 2
+          {:error, _} -> [tokens, ""]
+          _-> [tokens, exp_node] = parse_constant(tokens)
+              #Finalizando, revisa si existe el ;
+              {_atom, _value, tokens} = parse(tokens, :semicolon)
+              case tokens do #case 3
+              #Si tokens trae error, devuelve ese mismo error sin crear un nodo de árbol
+              {:error, _} -> [tokens, ""]
+              #De lo contrario, devuelve lista de tokens y el nodo a construir.
+              _ -> [tokens, {atom, "return", exp_node, {}}]
+            end #end case 3
+        end #end case 2
+      end #end case 1
     end
 
      def parse_constant(token, atom) do

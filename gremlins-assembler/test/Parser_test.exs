@@ -27,4 +27,10 @@ defmodule ParserTest do
     token_list = Lexer.scan_word(File.read!("test/codigoc/missing_par.c"), :no_output);
     assert  Parser.parse_tokens(elem(token_list, 1), :no_output) == {:error, "Error de sintáxis. Se esperaba ) y se encontró: {"}
   end
+
+  test "Prueba 4 de Nora Sandler: Sin valor de retorno" do
+    token_list = Lexer.scan_word(File.read!("test/codigoc/missing_ret.c"), :no_output);
+    assert  Parser.parse_tokens(elem(token_list, 1), :no_output) == {:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró ;."}
+  end
+
 end

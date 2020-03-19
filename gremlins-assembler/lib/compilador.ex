@@ -5,9 +5,9 @@ defmodule Compilador do
     case args do
        ["-h"] -> help() |> IO.puts();
        [path] -> if path =~ ".c", do: compile(path, :no_output), else: errors(1) |> IO.puts;
-       ["-s", path] -> compile(path, :gen_asm); #órden de generar asm
-       ["-t", path] -> compile(path, :show_token); #muestra la lista de tokens
-       ["-a", path] -> compile(path, :show_ast); #muestra el arbol AST
+       ["-st", path] -> compile(path, :gen_asm); #órden de generar asm
+       ["-lt", path] -> compile(path, :show_token); #muestra la lista de tokens
+       ["-aa", path] -> compile(path, :show_ast); #muestra el arbol AST
        ["-o", path, new_name] ->compile(path, new_name); #se recibe un nuevo nombre en vez de átomo
        _ -> errors(1) |> IO.puts;
             errors(1)
@@ -28,9 +28,9 @@ defmodule Compilador do
    def help() do
      "
      Uso:\n ./gremlis-compiler nombre del archivo.c | [option] nombre del archivo.c\n
-     \b -t      Muestra Tokens.
-     \b -a      Muestra el Árbol Sintáctico.
-     \b -s      Genera el código en ensamblador (x86).
+     \b -lt      Muestra Tokens.
+     \b -st      Muestra el Árbol Sintáctico.
+     \b -sa      Genera el código en ensamblador (x86).
      \b -o [nombre del archivo] [nombre_ejecutable] Especifica el nombre del ejecutable a generar.
      "
    end

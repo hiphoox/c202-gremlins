@@ -18,7 +18,7 @@ defmodule Compilador do
      if path =~ ".c" and File.exists?(path) do
        IO.puts "Valid path" <> path
        #Llamamos al organizador
-       Organizer.manager(File.read!(path), path, flag_or_name);
+       manager(File.read!(path), path, flag_or_name);
       else
         errors(3) |> IO.puts;
         errors(3);
@@ -42,5 +42,19 @@ defmodule Compilador do
         3 -> "Archivo inválido o no existe en el directorio." #mensaje de archivo inexistente
       end
     end
+
+  def manager(file, path, opt) do
+  #Utilizando "with" se procesa el archivo. Si hay error deja de hacer la compilación.
+  with  {:ok, tok} <- Lexer.scan_word(file, opt),
+        {:ok , ast} <- Parser.parse_token_list(tok, opt)
+        do
+        IO.puts("Finalizó la compilación de forma exitosa.")
+  else
+  #Se muestra el motivo del error o la salida de la opción seleccionada al compilar
+        {:error, error} -> IO.puts(error)
+        {:only_tokens, _} -> IO.puts("Lista de tokens.")
+        {:only_ast, _} -> IO.puts("Árbol Sintáctico.")
+      end
+  end
 
 end

@@ -3,7 +3,6 @@ defmodule Lexer do
   def scan_word(string, flag) do
     #Realiza scaneo del código con expresiones regulares
     words = Scanner.fix_format(string)
-    IO.puts words
     case words do
       [""] -> {:error, "Error. Archivo código fuente vacío."}
         _ ->  start_lexing(words, flag) #Comenzamos con lista de Tokens
@@ -14,7 +13,6 @@ defmodule Lexer do
 
   def start_lexing(words, flag) do
     token_list = Enum.flat_map(words, &lex_raw_tokens/1)
-    IO.inspect(token_list)
     #Si hubo error, debe de haber un token llamado ":error".
     if Enum.member?(token_list, :error) do
       #Si dicho token no existe, entonces devuelve tupla de error
@@ -37,7 +35,6 @@ defmodule Lexer do
 
 
   def lex_raw_tokens(program) when program != "" do #Búsqueda de patrones en la cadena de código
-    IO.puts program
     {token, cadena_restante} =
     case program do
         "{" <> cadena_restante -> {:open_brace, cadena_restante}

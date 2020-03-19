@@ -96,7 +96,7 @@ defmodule Parser do
             :close_brace->"}"
             :return_Reserveword->"return"
             :semicolon->";"
-            _ -> "(vacío)"
+            _ -> "(empty)"
         end
     end
 end 

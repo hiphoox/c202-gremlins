@@ -8,7 +8,7 @@ defmodule Compilador do
        ["-st", path] -> compile(path, :gen_asm); #órden de generar asm
        ["-lt", path] -> compile(path, :show_token); #muestra la lista de tokens
        ["-aa", path] -> compile(path, :show_ast); #muestra el arbol AST
-       ["-o", path, new_name] ->compile(path, new_name); #se recibe un nuevo nombre en vez de átomo
+       ["-o", path, ej_name] ->compile(path, ej_name); #se recibe un nuevo nombre en vez de átomo
        _ -> errors(1) |> IO.puts;
             errors(1)
      end
@@ -47,7 +47,8 @@ defmodule Compilador do
   #Utilizando "with" se procesa el archivo. Si hay error deja de hacer la compilación.
   with  {:ok, tok} <- Lexer.scan_word(file, opt),
         {:ok , ast} <- Parser.parse_token_list(tok, opt),
-        {:ok, asm} <- Generador.code_gen(ast, opt, path)
+        {:ok, asm} <- Generador.code_gen(ast, opt, path),
+        {:ok, _}  <- Linker.outputBin(asm, opt, path)
         do
         IO.puts("Finalizó la compilación de forma exitosa.")
   else
@@ -55,6 +56,7 @@ defmodule Compilador do
         {:error, error} -> IO.puts(error)
         {:only_tokens, _} -> IO.puts("Lista de tokens.")
         {:only_ast, _} -> IO.puts("Árbol Sintáctico.")
+        {:only_asm, path_asm} ->IO.puts(path_asm)
       end
   end
 

@@ -47,7 +47,7 @@ defmodule Compilador do
   #Utilizando "with" se procesa el archivo. Si hay error deja de hacer la compilación.
   with  {:ok, tok} <- Lexer.scan_word(file, opt),
         {:ok , ast} <- Parser.parse_token_list(tok, opt),
-        {:ok, asm} <- Generador_codigo.assembly(ast, opt, path),
+        {:ok, asm} <- Generador.code_gen(ast, opt, path)
         do
         IO.puts("Finalizó la compilación de forma exitosa.")
   else

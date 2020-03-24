@@ -1,9 +1,9 @@
 defmodule Generador do
 
   def code_gen(ast, flag, path) do
-    #obtener stack con el recorido en post-orden primero
+    #primero obtener stack 
     post_stack = postorden_recorrido(ast, [])
-    #IO.inspect(post_stack)
+    IO.inspect(post_stack)
     #vuelve a recorrer pero con la lista del recorrido para revisar si sigue operacion binaria
     asm_string = postorden(ast, "", post_stack)
     #IO.puts(asm_string)
@@ -53,6 +53,19 @@ defmodule Generador do
       """
    
 
+  end
+
+  ##pega el valor de la constante y añade una instruccion return
+  def codigo_gen(:return_Reserveword, _, codigo, _) do
+    codigo <> """
+        ret
+    """
+  end
+
+  def genera_archivo(code,path) do
+    asm_path = String.replace_trailing(path, ".c", ".s")
+    File.write!((asm_path), code)
+    {:only_asm, "Archivo ensamblador generado correctamente en la ruta: " <> asm_path}
   end
 
 end 

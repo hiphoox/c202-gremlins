@@ -2,23 +2,21 @@ defmodule Generador do
 
   def code_gen(ast, flag, path) do
     #primero obtener stack 
-    post_stack = postorden_recorrido(ast, [])
-    IO.inspect(post_stack)
-    #vuelve a recorrer pero con la lista del recorrido para revisar si sigue operacion binaria
+    post_stack = postorden_rec(ast, [])
+    #vuelve a recorrer pero con la lista del recorrido para generar ensamblador
     asm_string = postorden(ast, "", post_stack)
-    #IO.puts(asm_string)
     #Según la bandera, escribe ensamblador en disco o continua hacia el linker para generar ejecutable
     if flag == :gen_asm, do: genera_archivo(asm_string, path), else: {:ok, asm_string}
   end
-  #sin hijos el nodo
+  
 
-  defp postorden_recorrido({_, value, izquierda ,derecha }, l_rec) do
-    l_rec = postorden_recorrido(izquierda, l_rec)
-    l_rec = postorden_recorrido(derecha, l_rec)
+  defp postorden_rec({_, value, izquierda ,derecha }, l_rec) do
+    l_rec = postorden_rec(izquierda, l_rec)
+    l_rec = postorden_rec(derecha, l_rec)
     l_rec ++ [value]
   end
 
-  defp postorden_recorrido({}, l_rec), do: l_rec;
+  defp postorden_rec({}, l_rec), do: l_rec;
 
   #Búsqueda en postorden (izquierda, derecha y arriba)
   defp postorden({atomo, value, izquierda ,derecha }, code, post_stack) do
@@ -40,7 +38,7 @@ defmodule Generador do
 
   def codigo_gen(:function, _, codigo, _) do
     """
-        .globl  main         ## -- Begin function main
+        .globl  main         ## --Function main
     _main:                    ## @main
     """  <> codigo 
   end
@@ -51,11 +49,9 @@ defmodule Generador do
           mov     $#{value}, %rax
           push    %rax
       """
-   
-
   end
 
-  ##pega el valor de la constante y añade una instruccion return
+  ##Anexa la constante y añade una instruccion return
   def codigo_gen(:return_Reserveword, _, codigo, _) do
     codigo <> """
         ret
@@ -65,7 +61,7 @@ defmodule Generador do
   def genera_archivo(code,path) do
     asm_path = String.replace_trailing(path, ".c", ".s")
     File.write!((asm_path), code)
-    {:only_asm, "Archivo ensamblador generado correctamente en la ruta: " <> asm_path}
+    {:only_asm, "Archivo ensamblador generado correctamente,  ir a ruta: " <> asm_path}
   end
 
 end 

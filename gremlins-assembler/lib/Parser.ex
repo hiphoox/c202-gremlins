@@ -73,6 +73,31 @@ defmodule Parser do
       end
     end
 
+    def parse_un_op(tokens, operator, factor) do
+        [tokens, {operator, diccionario(operator), factor, {}}]
+    end
+
+    def parse_oper(tokens) do
+      operator = List.first(tokens); #guardo el operador
+      tokens = Enum.drop(tokens, 1) #extraccion del operador
+      [tokens, operator];
+    end
+
+#funcion que parsea el operador unario
+    def parse_un_ops(token, atom) do
+      case token do
+        {:error, _} -> {"", "", token}; 
+        _ -> if List.first(token) == atom do
+                remain=Enum.drop(token, 1) 
+                [token, inner_exp] = parse_expression(remain)
+                [token, {atom, dicc(atom), inner_exp,{}}]
+            else
+                [{:error, ""}, ""]
+            end
+      end
+    end
+
+
     #Muestra en pantalla el árbol. Finaliza ejecución al devolver la tupla :only_ast
     def parsing_flag(ast, :show_ast) do
       IO.inspect(ast)

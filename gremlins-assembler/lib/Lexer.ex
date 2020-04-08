@@ -35,26 +35,28 @@ defmodule Lexer do
 
 
   def lex_raw_tokens(program) when program != "" do #Búsqueda de patrones en la cadena de código
-    {token, cadena_restante} =
+    {token, resto} =
     case program do
-        "{" <> cadena_restante -> {:open_brace, cadena_restante}
-        "}" <> cadena_restante -> {:close_brace, cadena_restante}
-        "(" <> cadena_restante -> {:open_par, cadena_restante}
-        ")" <> cadena_restante -> {:close_par, cadena_restante}
-        ";" <> cadena_restante -> {:semicolon, cadena_restante}
-        "return" <> cadena_restante -> {:return_Reserveword, cadena_restante}
-        "int" <> cadena_restante -> {:int_Reserveword, cadena_restante}
-        "main" <> cadena_restante -> {:main_Reserveword, cadena_restante}
+        "{" <> resto -> {:open_brace, resto}
+        "}" <> resto -> {:close_brace, resto}
+        "(" <> resto -> {:open_par, resto}
+        ")" <> resto-> {:close_par, resto}
+        ";" <> resto -> {:semicolon, resto}
+        "return" <> resto -> {:return_Reserveword, resto}
+        "int" <> resto -> {:int_Reserveword, resto}
+        "main" <> resto -> {:main_Reserveword, resto}
+        "-" <> resto -> {:negation_Reserveword, resto}
+        "!" <> resto -> {:logicalNeg, resto}
         
 
         :error -> {:error, nil}
         #Si no hubo ninguna coincidencia, inserta el atomo error
         #si se encontró un error, guarda en cadena restante {:error, motivo}
-        cadena_restante -> get_constant_chk_error(cadena_restante)
+        resto -> get_constant_chk_error(resto)
         end
 
-        tokens_restantes = lex_raw_tokens(cadena_restante)
-        [token | tokens_restantes]
+        tokens_faltantes = lex_raw_tokens(resto)
+        [token | tokens_faltantes]
 
   end
 

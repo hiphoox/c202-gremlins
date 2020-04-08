@@ -51,6 +51,20 @@ defmodule Generador do
       """
   end
 
+  def codigo_gen(:negation_Reserveword, _, codigo, _) do
+    codigo <> """
+        neg     %rax
+    """
+  end
+
+  def codigo_gen(:logicalNeg, _, codigo, _) do
+    codigo <> """
+        cmp     $0, %rax
+        mov     $0, %rax
+        sete    %al
+    """
+  end
+
   ##Anexa la constante y añade una instruccion return
   def codigo_gen(:return_Reserveword, _, codigo, _) do
     codigo <> """

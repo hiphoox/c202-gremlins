@@ -18,7 +18,7 @@ defmodule Parser do
       {_atom, _value, tokens} = parse(tokens, :open_par)
       {_atom, _value, tokens} = parse(tokens, :close_par)
       {_atom, _value, tokens} = parse(tokens, :open_brace)
-      [tokens, state_node] = parse_statement(tokens)
+      [tokens, state_node] = parse_stmnt(tokens)
       {_atom, _value, tokens} = parse(tokens, :close_brace)
       
       case tokens do
@@ -40,7 +40,7 @@ defmodule Parser do
       end
     end
 
-    def parse_statement(tokens) do
+    def parse_stmnt(tokens) do
       case tokens do #case 1
         {:error, _} -> [tokens, ""]
         _-> {atom, _value, tokens} = parse(tokens, :return_Reserveword)
@@ -48,7 +48,7 @@ defmodule Parser do
         #Parseando expresión completa
         case tokens do #case 2
           {:error, _} -> [tokens, ""]
-          _-> [tokens, exp_node] = parse_constant(tokens, :constant)
+          _-> [tokens, exp_node] = parse_express(tokens, :constant)
               #Finalizando, revisa si existe el ;
               {_atom, _value, tokens} = parse(tokens, :semicolon)
               case tokens do #case 3
@@ -61,6 +61,18 @@ defmodule Parser do
       end #end case 1
     end
 
+    def parse_express(tokens) do
+    [tokens, node_term] = parse_term(tokens, ""); #term -> factor (constant, unop, binop)
+    end
+
+    def parse_term(tokens, last_op) do
+    #envia el operador parseado con anterioridad por si ocurre un error
+    [tokens, node_factor] = pars_factor(tokens, last_op); #oks
+      
+    end
+
+
+
      def parse_constant(token, atom) do
       #¿Token trae tupla error en vez de la lista? devuelvela tal como está.
       case token do
@@ -72,6 +84,24 @@ defmodule Parser do
             end
       end
     end
+
+    def pars_factor(tokens, last_op) do
+      #Parseando con operador unario
+      if List.first(tokens) == :negation_Reserveword  or List.first(tokens) == :logicalNeg  do
+          [tokens, operator] = parse_operation(tokens);
+          [tokens, factor] = parse_factor(tokens, "")
+          #Operador unario con un operando solamente
+          parse_unary_op(tokens, operator, factor)
+      else
+          #Constante unicamente, parsear y devolver
+          #Control de errores si no fue ninguno de los casos anteriores
+          case List.first(tokens) do
+            {:constant, _} -> parse_constant(tokens, :constant)
+            _ -> [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> diccionario(List.first(tokens)) <> "."}, ""]  
+          end
+      end
+    end
+  
 
     def parse_un_op(tokens, operator, factor) do
         [tokens, {operator, diccionario(operator), factor, {}}]
@@ -119,6 +149,8 @@ defmodule Parser do
             :close_par->")"
             :open_brace->"{"
             :close_brace->"}"
+            :logicalNeg->"!"
+            :negation_Reserveword->"-"
             :return_Reserveword->"return"
             :semicolon->";"
             _ -> "(empty)"

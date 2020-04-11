@@ -38,8 +38,8 @@ defmodule Generador do
 
   def codigo_gen(:function, _, codigo, _) do
     """
-        .globl  main         ## -- Begin function main
-    main:                    ## @main
+        .globl  _main         ## -- Begin function main
+    _main:                    ## @main
     """  <> codigo 
   end
 

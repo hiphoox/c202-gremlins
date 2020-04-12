@@ -84,7 +84,7 @@ defmodule Parser do
 
     def pars_factor(tokens) do
       #Parseando con operador unario
-      if List.first(tokens) == :negation_Reserveword  or List.first(tokens) == :logicalNeg  do
+      if List.first(tokens) == :negation_Reserveword or List.first(tokens) == :bitewise_Reserveword  or List.first(tokens) == :logicalNeg  do
           [tokens, operator] = parse_oper(tokens);
           [tokens, factor] = pars_factor(tokens)
           #Operador unario con un operando solamente
@@ -147,6 +147,7 @@ defmodule Parser do
             :open_brace->"{"
             :close_brace->"}"
             :logicalNeg->"!"
+            :bitewise_Reserveword -> "~"
             :negation_Reserveword->"-"
             :return_Reserveword->"return"
             :semicolon->";"

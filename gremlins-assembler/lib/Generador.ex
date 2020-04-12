@@ -46,14 +46,13 @@ defmodule Generador do
   def codigo_gen(:constant, value, codigo, post_stack) do
       
       codigo <> """
-          mov     $#{value}, %rax
-          push    %rax
+          movl $#{value},%eax
       """
   end
 
   def codigo_gen(:negation_Reserveword, _, codigo, _) do
     codigo <> """
-        neg     %rax
+        neg  %eax
     """
   end
 
@@ -70,6 +69,20 @@ defmodule Generador do
     codigo <> """
         ret
     """
+  end
+
+  def codigo_gen(:bitewise_Reserveword, _, codigo,post_stack) do
+     if List.first(post_stack) == "return" do
+       codigo <> """
+           not     %rax
+       """
+     else
+       codigo <> """
+           not     %rax
+           push    %rax
+       """
+     end
+
   end
 
   def genera_archivo(code,path) do

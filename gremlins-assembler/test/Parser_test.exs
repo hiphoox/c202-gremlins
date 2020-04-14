@@ -37,14 +37,14 @@ defmodule ParserTest do
     token_list = Lexer.scan_word("\n\tint main(\n ) { \n \t2; }", :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintáxis. Se esperaba return y se encontró: (empty)"}
   end
-#### Pruebas de válidas de Nora de operadores unarios (!),(~), (-). Segunda entrega
+#### Pruebas válidas de Nora de operadores unarios (!),(~), (-). Segunda entrega
  test "Prueba 5 de Nora Sandler: Operador unario, negacion lógica" do
     token_list = Lexer.scan_word(File.read!("test/not_ten.c"), :no_output);
     assert  Parser.parse_tokens(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
              {:function, "main",
-              {:return_Keyword, "return",
-               {:logicalNeg_Keyword, "!", {:constant, 10, {}, {}}, {}}, {}}, {}}, {}}}
+              {:return_Reserveword, "return",
+               {:logicalNeg, "!", {:constant, 10, {}, {}}, {}}, {}}, {}}, {}}}
   end
 
   test "Prueba 6 de Nora Sandler: Operador unario, complemento bit a bit de 0" do
@@ -52,8 +52,8 @@ defmodule ParserTest do
     assert  Parser.parse_tokens(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
              {:function, "main",
-              {:return_Keyword, "return",
-               {:bitewise_Keyword, "~", {:constant, 0, {}, {}}, {}}, {}}, {}}, {}}}
+              {:return_Reserveword, "return",
+               {:bitewise_Reserveword, "~", {:constant, 0, {}, {}}, {}}, {}}, {}}, {}}}
   end
  
  
@@ -62,9 +62,27 @@ defmodule ParserTest do
     assert  Parser.parse_tokens(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
              {:function, "main",
-              {:return_Keyword, "return",
-               {:negation_Keyword, "-", {:constant, 5, {}, {}}, {}}, {}}, {}}, {}}}
+              {:return_Reserveword, "return",
+               {:negation_Reserveword, "-", {:constant, 5, {}, {}}, {}}, {}}, {}}, {}}}
   end 
 
+  test "Prueba 8 de Nora Sandler: Anidando operadores unarios" do
+    token_list = Lexer.scan_word(File.read!("test/nested_ops.c"), :no_output);
+    assert  Parser.parse_tokens(elem(token_list, 1), :no_output) ==
+      {:ok, {:program, "program",
+             {:function, "main",
+              {:return_Reserveword, "return",
+               {:logicalNeg, "!",
+                {:negation_Reserveword, "-", {:constant, 3, {}, {}}, {}}, {}}, {}}, {}}, {}}}
+  end
 
+  test "Prueba 9 de Nora Sandler: Anidando operadores unarios 2" do
+    token_list = Lexer.scan_word(File.read!("test/nested_ops_2.c"), :no_output);
+    assert  Parser.parse_tokens(elem(token_list, 1), :no_output) ==
+      {:ok, {:program, "program",
+             {:function, "main",
+              {:return_Reserveword, "return",
+               {:negation_Reserveword, "-",
+                {:bitewise_Reserveword, "~", {:constant, 0, {}, {}}, {}}, {}}, {}}, {}}, {}}}
+  end
 end

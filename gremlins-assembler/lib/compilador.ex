@@ -27,7 +27,7 @@ defmodule Compilador do
 
    def help() do
      "
-     Uso:\n ./gremlis-compiler nombre del archivo.c | [option] nombre del archivo.c\n
+     Uso:\n ./compilador nombre del archivo.c | [option] nombre del archivo.c\n
      \b -lt      Muestra Tokens.
      \b -st      Muestra el Árbol Sintáctico.
      \b -sa      Genera el código en ensamblador (x86).

@@ -48,8 +48,11 @@ defmodule Lexer do
         "-" <> resto -> {:negation_Reserveword, resto}
         "!" <> resto -> {:logicalNeg, resto}
         "~" <> resto -> {:bitewise_Reserveword, resto}
-        
-
+        "-" <> resto -> {:min_Reserveword, resto}
+        "+" <> resto -> {:add_Reserveword, resto}
+        "/" <> resto -> {:div_Reserveword, resto}
+        "*" <> resto -> {:mult_Reserveword, resto}
+  
         :error -> {:error, nil}
         #Si no hubo ninguna coincidencia, inserta el atomo error
         #si se encontró un error, guarda en cadena restante {:error, motivo}

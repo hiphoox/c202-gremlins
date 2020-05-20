@@ -41,12 +41,12 @@ defmodule Parser do
     end
 
     def parse_stmnt(tokens) do
-      case tokens do #case 1
+      case tokens do 
         {:error, _} -> [tokens, ""]
         _-> {atom, _value, tokens} = parse(tokens, :return_Reserveword)
   
-        #Parseando expresión completa
-        case tokens do #case 2
+        #Parseando expresion
+        case tokens do 
           {:error, _} -> [tokens, ""]
           _-> [tokens, exp_node] = pars_factor(tokens)
               #Finalizando, revisa si existe el ;
@@ -61,14 +61,85 @@ defmodule Parser do
       end #end case 1
     end
 
-    #def parse_express(tokens) do
-    #  [tokens, node_term] = parse_term(tokens, ""); #term -> factor (constant, unop, binop)
-    #end
+    def parse_express(tokens) do
+      [tokens, node_term] = parse_term(tokens, ""); #term -> factor (constant, unop, binop)
+      #[head|tail] = tokens
+      #Control de errores, ver si viene uno de ellos o una suma/resta después de un factor
+      case tokens do
+      {:error, _} -> [tokens, ""]
+      _-> if List.first(tokens) == :negation_Keyword or List.first(tokens) == :addition_Keyword do
+            next_t_exp(tokens, node_term)
+          else
+            [tokens, node_term]; #Sin operación de suma o resta
+          end
+      end
+    end
 
-    #def parse_term(tokens, last_op) do
-      #envia el operador parseado con anterioridad por si ocurre un error
-    #  [tokens, node_factor] = pars_factor(tokens, last_op); #oks
-    #end
+    def next_t_exp(tokens, node_term) do
+        #Extrae el operador binario
+        [tokens, operator] = parse_operation(tokens);
+
+        #Cambiar operador unario de negación a resta binaria
+        if operator == :negation_Keyword do
+          operator = :minus_Keyword
+          #node_term es nodo hoja operando 1
+          #next_term es nodo hoja operando 2, extraer con la siguiente función.
+          [tokens, next_term] = parse_term(tokens, operator)
+
+          #¿Faltó el segundo operando?
+          case tokens do #case 1
+            {:error, _} -> [tokens, ""]
+              _ ->
+              #Construccion del nodo con resta como operando.
+              [tokens, node_term] = parse_bin_op(tokens, operator, node_term, next_term);
+              [head|_] = tokens
+              #recursividad
+              #¿Hay más sumas o restas? Llama a esta misma función para parsear operadores y operandos.
+              case tokens do #case 2
+                  {:error, _} -> [tokens, ""]
+                  _ -> if head == :negation_Keyword or head ==:addition_Keyword do
+                        next_term_exp(tokens, node_term)
+                      else
+                        [tokens, node_term]; #no hubo operacion de suma ni resta
+                      end #end if
+              end #end case 2
+          end #end case 1
+        else
+              #node_term es nodo hoja 1
+              #next_termn es nodo hoja 2
+              [tokens, next_term] = parse_term(tokens, operator)
+              #¿Faltó el segundo operando?
+              case tokens do #case 1
+                {:error, _} -> [tokens, ""]
+                _->  #Construccion del nodo con resta como operando.
+                [tokens, node_term] = parse_bin_op(tokens, operator, node_term, next_term);
+                [head|_] = tokens
+                #recursividad
+                #¿Hay más sumas o restas? Llama a esta misma función para parsear operadores y operandos.
+                case tokens do #case 2
+                  {:error, _} -> [tokens, ""]
+                  _ -> if head == :negation_Keyword or head ==:addition_Keyword do
+                          next_term_exp(tokens, node_term)
+                        else
+                          [tokens, node_term]; #no hubo operacion de suma ni resta
+                        end #end if
+                  end #end case 2
+                end #end case 1
+        end
+      end #end
+
+      def parse_term(tokens, last_op) do
+        #envia el operador parseado con anterioridad por si ocurre un error
+        [tokens, node_factor] = parse_factor(tokens, last_op); #oks
+        case tokens do
+          {:error, _} -> [tokens, ""]
+          _ -> if List.first(tokens) == :multiplication_Keyword or List.first(tokens) == :division_Keyword do
+                  next_fact_term(tokens, node_factor)
+              else #sino hay mmultiplicacion o division
+                  [tokens, node_factor]; #no hubo operacion de suma ni resta
+              end
+        end
+      end
 
      def parse_constant(token, atom) do
       #¿Token trae tupla error en vez de la lista? devuelvela tal como está.
@@ -78,6 +149,23 @@ defmodule Parser do
                 [Enum.drop(token, 1), {elem(List.first(token),0), elem(List.first(token),1),{},{}}]
              else
                 #{"", "", {:error, "Error de sintáxis. Constante inválida."}}
+            end
+      end
+    end
+
+    def next_fact_term(tokens, node_factor)  do
+      [tokens, operator] = parse_operation(tokens); #extrae el operador 1
+      [tokens, next_factor] = pars_factor(tokens, operator) #extrae el operador 2
+
+      # construccion del nodo con suma o resta
+      [tokens, node_factor] = parse_bin_op(tokens, operator, node_factor, next_factor);
+      #recursividad
+      case tokens do
+        {:error, _} -> [tokens, ""]
+        _ -> if List.first(tokens) == :multiplication_Keyword or List.first(tokens) ==:division_Keyword do
+                next_factor_term(tokens, node_factor)
+            else #sino hay mmultiplicacion o division, continua
+                [tokens, node_factor];
             end
       end
     end
@@ -122,6 +210,10 @@ defmodule Parser do
                 [{:error, ""}, ""]
             end
       end
+    end
+
+    def parse_bin_op(tokens, operator, node_term, next_term) do
+      [tokens, {operator, diccionario(operator), node_term, next_term}]
     end
 
 

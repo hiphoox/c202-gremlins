@@ -48,7 +48,6 @@ defmodule Lexer do
         "-" <> resto -> {:negation_Reserveword, resto}
         "!" <> resto -> {:logicalNeg, resto}
         "~" <> resto -> {:bitewise_Reserveword, resto}
-        "-" <> resto -> {:min_Reserveword, resto}
         "+" <> resto -> {:add_Reserveword, resto}
   
         :error -> {:error, nil}

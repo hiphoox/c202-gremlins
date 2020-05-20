@@ -104,7 +104,7 @@ defmodule Parser do
                 case tokens do 
                   {:error, _} -> [tokens, ""]
                   _ -> if head == :negation_Keyword or head ==:addition_Keyword do
-                          next_term_exp(tokens, node_term)
+                          next_t_exp(tokens, node_term)
                         else
                           [tokens, node_term]; #no hubo operacion
                         end 
@@ -155,7 +155,7 @@ defmodule Parser do
         case tokens do
           {:error, _} -> [tokens, ""]
           _ ->   if List.first(tokens) != :close_par do
-              [{:error, "Se esperaba " <> diccionario(:close_par) <> "después de la expresión y se encontró " <> diccionario(List.first(tokens))}, ""]
+              [{:error, "Se esperaba " <> dicc(:close_par) <> "después de la expresión y se encontró " <> dicc(List.first(tokens))}, ""]
             else
               tokens=Enum.drop(tokens, 1);
               [tokens, node_exp];
@@ -172,12 +172,12 @@ defmodule Parser do
           case List.first(tokens) do
             {:constant, _} -> parse_constant(tokens, :constant)
             _ -> if (List.first(tokens)) == :add_Reserveword   do
-                  [{:error, "Error de sintaxis: Falta el primer operando antes de " <> diccionario(List.first(tokens)) <> "."}, ""]
+                  [{:error, "Error de sintaxis: Falta el primer operando antes de " <> dicc(List.first(tokens)) <> "."}, ""]
                 else
                   if last_op == :addition_Reserveword or last_op == :min_Reserveword do
-                    [{:error, "Error de sintaxis: Falta el segundo operando después de " <> diccionario(last_op) <> "."}, ""]
+                    [{:error, "Error de sintaxis: Falta el segundo operando después de " <> dicc(last_op) <> "."}, ""]
                   else
-                    [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> diccionario(List.first(tokens)) <> "."}, ""]
+                    [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> dicc(List.first(tokens)) <> "."}, ""]
                   end
                 end
           end
@@ -202,7 +202,7 @@ defmodule Parser do
         {:error, _} -> {"", "", token}; 
         _ -> if List.first(token) == atom do
                 remain=Enum.drop(token, 1) 
-                [token, inner_exp] = pars_factor(remain)
+                [token, inner_exp] = parse_express(remain)
                 [token, {atom, dicc(atom), inner_exp,{}}]
             else
                 [{:error, ""}, ""]
@@ -211,7 +211,7 @@ defmodule Parser do
     end
 
     def parse_bin_op(tokens, operator, node_term, next_term) do
-      [tokens, {operator, diccionario(operator), node_term, next_term}]
+      [tokens, {operator, dicc(operator), node_term, next_term}]
     end
 
 

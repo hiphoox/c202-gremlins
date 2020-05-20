@@ -62,7 +62,7 @@ defmodule Parser do
       [tokens, node_term] = parse_term(tokens, "");
       case tokens do
       {:error, _} -> [tokens, ""]
-      _-> if List.first(tokens) == :negation_Reserveword or List.first(tokens) == :add_Keyword do
+      _-> if List.first(tokens) == :negation_Reserveword or List.first(tokens) == :add_Reserveword do
             next_t_exp(tokens, node_term)
           else
             [tokens, node_term]; 
@@ -86,7 +86,7 @@ defmodule Parser do
               #recursividad
               case tokens do 
                   {:error, _} -> [tokens, ""]
-                  _ -> if head == :negation_Reserveword or head ==:add_Keyword do
+                  _ -> if head == :negation_Reserveword or head ==:add_Reserveword do
                         next_t_exp(tokens, node_term)
                       else
                         [tokens, node_term]; #no hubo operacion
@@ -103,7 +103,7 @@ defmodule Parser do
                 #recursividad
                 case tokens do 
                   {:error, _} -> [tokens, ""]
-                  _ -> if head == :negation_Keyword or head ==:addition_Keyword do
+                  _ -> if head == :negation_Reserveword or head ==:add_Reserveword do
                           next_t_exp(tokens, node_term)
                         else
                           [tokens, node_term]; #no hubo operacion

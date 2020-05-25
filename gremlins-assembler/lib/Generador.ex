@@ -85,6 +85,21 @@ defmodule Generador do
 
   end
 
+  def codigo_gen(:min_Reserveword, _, codigo, _) do
+     codigo <> """
+        pop     %rcx
+        sub     %rax, %rcx
+        mov     %rcx, %rax
+    """
+  end
+
+  def codigo_gen(:add_Reserveword, _, codigo, _) do
+     codigo <> """
+        pop     %rcx
+        add     %rcx, %rax
+    """
+ end
+
   def genera_archivo(code,path) do
     asm_path = String.replace_trailing(path, ".c", ".s")
     File.write!((asm_path), code)

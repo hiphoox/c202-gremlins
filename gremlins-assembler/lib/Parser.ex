@@ -5,14 +5,14 @@ defmodule Parser do
     end
   
     def parse_program(tokens) do
-      [tokens, func_node] = parse_function(tokens)
+      [tokens, func_node] = parse_main(tokens)
       case tokens do
         {:error, _} -> tokens
         _-> {:program, "program", func_node, {}}
       end
     end
 
-    def parse_function(tokens) do
+    def parse_main(tokens) do
       {_atom, _value, tokens} = parse(tokens, :int_Reserveword)
       {_atom, _value, tokens} = parse(tokens, :main_Reserveword)
       {_atom, _value, tokens} = parse(tokens, :open_par)
@@ -41,39 +41,90 @@ defmodule Parser do
     end
 
     def parse_stmnt(tokens) do
-      case tokens do #case 1
+      case tokens do 
         {:error, _} -> [tokens, ""]
         _-> {atom, _value, tokens} = parse(tokens, :return_Reserveword)
   
-        #Parseando expresión completa
-        case tokens do #case 2
+        #Parseando expresion
+        case tokens do 
           {:error, _} -> [tokens, ""]
-          _-> [tokens, exp_node] = pars_factor(tokens)
-              #Finalizando, revisa si existe el ;
-              {_atom, _value, tokens} = parse(tokens, :semicolon)
-              case tokens do #case 3
-              #Si tokens trae error, devuelve ese mismo error sin crear un nodo de árbol
+          _-> [tokens, exp_node] = parse_express(tokens)
+              {_atom, _value, tokens} = parse(tokens, :semicolon)   #Revisa si existe el ;
+              case tokens do 
               {:error, _} -> [tokens, ""]
-              #De lo contrario, devuelve lista de tokens y el nodo a construir.
               _ -> [tokens, {atom, "return", exp_node, {}}]
-            end #end case 3
-        end #end case 2
-      end #end case 1
+            end 
+        end 
+      end
     end
 
-    #def parse_express(tokens) do
-    #  [tokens, node_term] = parse_term(tokens, ""); #term -> factor (constant, unop, binop)
-    #end
+    def parse_express(tokens) do
+      [tokens, node_term] = parse_term(tokens, "");
+      case tokens do
+      {:error, _} -> [tokens, ""]
+      _-> if List.first(tokens) == :negation_Reserveword or List.first(tokens) == :add_Reserveword do
+            next_t_exp(tokens, node_term)
+          else
+            [tokens, node_term]; 
+          end
+      end
+    end
 
-    #def parse_term(tokens, last_op) do
-      #envia el operador parseado con anterioridad por si ocurre un error
-    #  [tokens, node_factor] = pars_factor(tokens, last_op); #oks
-    #end
+    def next_t_exp(tokens, node_term) do
+        [tokens, operator] = parse_oper(tokens);
+
+        if operator == :negation_Keyword do
+          operator = :minus_Keyword
+          [tokens, next_term] = parse_term(tokens, operator)
+
+          case tokens do 
+            {:error, _} -> [tokens, ""]
+              _ ->
+              #Construccion del nodo con resta.
+              [tokens, node_term] = parse_bin_op(tokens, operator, node_term, next_term);
+              [head|_] = tokens
+              #recursividad
+              case tokens do 
+                  {:error, _} -> [tokens, ""]
+                  _ -> if head == :negation_Reserveword or head ==:add_Reserveword do
+                        next_t_exp(tokens, node_term)
+                      else
+                        [tokens, node_term]; #no hubo operacion
+                      end 
+              end 
+          end
+        else
+              [tokens, next_term] = parse_term(tokens, operator)
+              case tokens do 
+                {:error, _} -> [tokens, ""]
+                _->  #Construccion del nodo con resta.
+                [tokens, node_term] = parse_bin_op(tokens, operator, node_term, next_term);
+                [head|_] = tokens
+                #recursividad
+                case tokens do 
+                  {:error, _} -> [tokens, ""]
+                  _ -> if head == :negation_Reserveword or head ==:add_Reserveword do
+                          next_t_exp(tokens, node_term)
+                        else
+                          [tokens, node_term]; #no hubo operacion
+                        end 
+                  end 
+                end 
+        end
+      end #end
+
+      def parse_term(tokens, last_op) do
+        #envia el operador parseado con anterioridad por si ocurre un error
+        [tokens, node_factor] = pars_factor(tokens, last_op); #oks
+        case tokens do
+          {:error, _} -> [tokens, ""]
+          _ -> [tokens, node_factor]
+        end
+      end
 
      def parse_constant(token, atom) do
-      #¿Token trae tupla error en vez de la lista? devuelvela tal como está.
       case token do
-        {:error, _} -> {"", "", token}; #envia null porque solo te interesa propagar tokens
+        {:error, _} -> {"", "", token};
         _ -> if elem(List.first(token), 0) == atom do
                 [Enum.drop(token, 1), {elem(List.first(token),0), elem(List.first(token),1),{},{}}]
              else
@@ -82,20 +133,55 @@ defmodule Parser do
       end
     end
 
-    def pars_factor(tokens) do
+    def next_fact_term(tokens, node_factor)  do
+      [tokens, operator] = parse_oper(tokens); #extrae el operador 1
+      [tokens, next_factor] = pars_factor(tokens, operator) #extrae el operador 2
+
+      # construccion del nodo con suma o resta
+      [tokens, node_factor] = parse_bin_op(tokens, operator, node_factor, next_factor);
+      #recursividad
+      case tokens do
+        {:error, _} -> [tokens, ""]
+        _ -> [tokens, node_factor]
+      end
+    end
+
+    def pars_factor(tokens, last_op) do
+      #Parsea tokens dentro de los parentesis
+      if List.first(tokens) == :open_par do
+        tokens=Enum.drop(tokens, 1);
+        [tokens, node_exp] = parse_express(tokens);
+
+        case tokens do
+          {:error, _} -> [tokens, ""]
+          _ ->   if List.first(tokens) != :close_par do
+              [{:error, "Se esperaba " <> dicc(:close_par) <> "después de la expresión y se encontró " <> dicc(List.first(tokens))}, ""]
+            else
+              tokens=Enum.drop(tokens, 1);
+              [tokens, node_exp];
+            end
+        end
+
       #Parseando con operador unario
-      if List.first(tokens) == :negation_Reserveword or List.first(tokens) == :bitewise_Reserveword  or List.first(tokens) == :logicalNeg  do
+      else if List.first(tokens) == :negation_Reserveword or List.first(tokens) == :bitewise_Reserveword or List.first(tokens) == :logicalNeg  do
           [tokens, operator] = parse_oper(tokens);
-          [tokens, factor] = pars_factor(tokens)
+          [tokens, factor] = pars_factor(tokens, "")
           #Operador unario con un operando solamente
           parse_un_op(tokens, operator, factor)
-      else
-          #Constante unicamente, parsear y devolver
-          #Control de errores si no fue ninguno de los casos anteriores
+        else
           case List.first(tokens) do
             {:constant, _} -> parse_constant(tokens, :constant)
-            _ -> [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> dicc(List.first(tokens)) <> "."}, ""]  
+            _ -> if (List.first(tokens)) == :add_Reserveword   do
+                  [{:error, "Error de sintaxis: Falta el primer operando antes de " <> dicc(List.first(tokens)) <> "."}, ""]
+                else
+                  if last_op == :addition_Reserveword or last_op == :min_Reserveword do
+                    [{:error, "Error de sintaxis: Falta el segundo operando después de " <> dicc(last_op) <> "."}, ""]
+                  else
+                    [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> dicc(List.first(tokens)) <> "."}, ""]
+                  end
+                end
           end
+        end
       end
     end
   
@@ -104,9 +190,9 @@ defmodule Parser do
         [tokens, {operator, dicc(operator), factor, {}}]
     end
 
-    def parse_oper(tokens) do
-      operator = List.first(tokens); #guardo el operador
-      tokens = Enum.drop(tokens, 1) #extraccion del operador
+    def parse_oper(tokens) do   #Guardando en arbol el operador
+      operator = List.first(tokens); 
+      tokens = Enum.drop(tokens, 1) 
       [tokens, operator];
     end
 
@@ -116,12 +202,16 @@ defmodule Parser do
         {:error, _} -> {"", "", token}; 
         _ -> if List.first(token) == atom do
                 remain=Enum.drop(token, 1) 
-                [token, inner_exp] = pars_factor(remain)
+                [token, inner_exp] = parse_express(remain)
                 [token, {atom, dicc(atom), inner_exp,{}}]
             else
                 [{:error, ""}, ""]
             end
       end
+    end
+
+    def parse_bin_op(tokens, operator, node_term, next_term) do
+      [tokens, {operator, dicc(operator), node_term, next_term}]
     end
 
 
@@ -149,6 +239,8 @@ defmodule Parser do
             :logicalNeg->"!"
             :bitewise_Reserveword -> "~"
             :negation_Reserveword->"-"
+            :min_Reserveword -> "-"
+            :add_Reserveword -> "+"
             :return_Reserveword->"return"
             :semicolon->";"
             _ -> "(empty)"

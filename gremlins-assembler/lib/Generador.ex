@@ -58,8 +58,8 @@ defmodule Generador do
 
   def codigo_gen(:logicalNeg, _, codigo, _) do
     codigo <> """
-        cmp     $0, %rax
-        mov     $0, %rax
+        cmpl     $0, %eax
+        movl     $0, %eax
         sete    %al
     """
   end

@@ -33,7 +33,9 @@ defmodule LexerTest do
     assert Lexer.start_lexing(["int", "main()", "{", "return", "2", ";}"], :no_output) == state[:tokens]
   end
 
-  test "Prueba 1 de Nora Sandler" do
+  #STAGE 1 
+
+  test "Prueba 1-1 : return de una constante de 1 digito" do
     assert Lexer.scan_word(File.read!("test/codigoc/sinespacios.c"), :no_output) == {:ok, [
       :int_Reserveword,
       :main_Reserveword,
@@ -46,11 +48,11 @@ defmodule LexerTest do
       :close_brace]}
   end
 
-  test "Prueba 2 de Nora Sandler", state do
+  test "Prueba 1-2 : Return de 2", state do
     assert Lexer.scan_word(File.read!("test/codigoc/return2.c"), :no_output) == state[:tokens]
   end
 
-  test "Prueba 3 de Nora Sandler:" do
+  test "Prueba 1-3 : Return de 0" do
     assert Lexer.scan_word(File.read!("test/codigoc/return0.c"), :no_output) == {:ok,[
       :int_Reserveword,
       :main_Reserveword,
@@ -63,7 +65,7 @@ defmodule LexerTest do
       :close_brace]}
   end
 
-  test "Prueba 4 de Nora Sandler" do
+  test "Prueba 1-4 : Codigo sin saltos de linea" do
     assert Lexer.scan_word(File.read!("test/codigoc/sinsaltosdelinea.c"), :no_output) == {:ok, [
       :int_Reserveword,
       :main_Reserveword,
@@ -76,7 +78,7 @@ defmodule LexerTest do
       :close_brace]}
   end
 
-  test "Prueba 5 de Nora Sandler" do
+  test "Prueba 1-5: Return de constante con multiples digitos" do
     assert Lexer.scan_word(File.read!("test/codigoc/multiplesdigitos.c"), :no_output) == {:ok, [
       :int_Reserveword,
       :main_Reserveword,
@@ -89,7 +91,7 @@ defmodule LexerTest do
       :close_brace]}
   end
 
-  test "Prueba 6 de Nora Sandler" do
+  test "Prueba 1-6 : Codigo con multiples saltos de linea " do
     assert Lexer.scan_word(File.read!("test/codigoc/consaltosdelinea.c"), :no_output) == {:ok, [
       :int_Reserveword,
       :main_Reserveword,
@@ -102,8 +104,10 @@ defmodule LexerTest do
       :close_brace]}
   end
 
-  test "Prueba 7 de Nora Sandler" do
+  test "Prueba 1-7 : Palabra reservada return en mayusculas" do
     assert Lexer.scan_word(File.read!("test/codigoc/returnenmayusculas.c"), :no_output) == {:error, "Error léxico."}
   end
+
+
 
 end

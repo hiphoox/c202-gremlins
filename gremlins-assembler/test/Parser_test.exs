@@ -9,13 +9,15 @@ defmodule ParserTest do
               {:return_Reserveword, "return", {:constant, 2, {}, {}}, {}}, {}}, {}}
              }}
   end
+  
+  ##STAGE 1
 
-  test "Prueba 1 de Nora Sandler: árbol ast de un código que retorna 2", state do
+  test "Prueba 1-1 de Nora Sandler: árbol ast de un código que retorna 2", state do
     token_list = Lexer.scan_word(File.read!("test/codigoc/return2.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == state[:ast]
   end
 
-  test "Prueba 2 de Nora Sandler: árbol ast de un código que retorna 100" do
+  test "Prueba 1-2 de Nora Sandler: árbol ast de un código que retorna 100" do
     token_list = Lexer.scan_word(File.read!("test/codigoc/multiplesdigitos.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
@@ -23,22 +25,19 @@ defmodule ParserTest do
                {:return_Reserveword, "return", {:constant, 100, {}, {}}, {}}, {}}, {}}}
   end
 
-  test "Prueba 3 de Nora Sandler: código al cual le falta un paréntesis que cierra" do
+  test "Prueba 1-3 de Nora Sandler: código al cual le falta un paréntesis que cierra" do
     token_list = Lexer.scan_word(File.read!("test/codigoc/missing_par.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintáxis. Se esperaba ) y se encontró: {"}
   end
 
-  # test "Prueba 4 de Nora Sandler: Sin valor de retorno" do
-  #   token_list = Lexer.scan_word(File.read!("test/codigoc/missing_ret.c"), :no_output);
-  #   assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintaxis: Se esperaba una constante  y se encontró ;."}
-  # end
-
-  test "Código al cual le falta el return" do
+  test "Prueba 1-4 de Nora Sandler: Código al cual le falta el return" do
     token_list = Lexer.scan_word("\n\tint main(\n ) { \n \t2; }", :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintáxis. Se esperaba return y se encontró: (empty)"}
   end
-#### Pruebas válidas de Nora de operadores unarios (!),(~), (-). Segunda entrega
- test "Prueba 5 de Nora Sandler: Operador unario, negacion lógica" do
+
+ ### STAGE 2
+ 
+ test "Prueba 2-1 de Nora Sandler: Operador unario, negacion lógica" do
     token_list = Lexer.scan_word(File.read!("test/codigoc/not_ten.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
@@ -47,7 +46,7 @@ defmodule ParserTest do
                {:logicalNeg, "!", {:constant, 10, {}, {}}, {}}, {}}, {}}, {}}}
   end
 
-  test "Prueba 6 de Nora Sandler: Operador unario, complemento bit a bit de 0" do
+  test "Prueba2-2 de Nora Sandler: Operador unario, complemento bit a bit de 0" do
     token_list = Lexer.scan_word(File.read!("test/codigoc/bitwise_zero.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
@@ -57,7 +56,7 @@ defmodule ParserTest do
   end
  
  
- test "Prueba 7 de Nora Sandler: Operador unario, negación" do
+ test "Prueba 2-3 de Nora Sandler: Operador unario, negación" do
     token_list = Lexer.scan_word(File.read!("test/codigoc/negacion.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
@@ -66,7 +65,7 @@ defmodule ParserTest do
                {:negation_Reserveword, "-", {:constant, 5, {}, {}}, {}}, {}}, {}}, {}}}
   end 
 
-  test "Prueba 8 de Nora Sandler: Anidando operadores unarios" do
+  test "Prueba 2-4 de Nora Sandler: Anidando operadores unarios" do
     token_list = Lexer.scan_word(File.read!("test/codigoc/nested_ops.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
@@ -76,7 +75,7 @@ defmodule ParserTest do
                 {:negation_Reserveword, "-", {:constant, 3, {}, {}}, {}}, {}}, {}}, {}}, {}}}
   end
 
-  test "Prueba 9 de Nora Sandler: Anidando operadores unarios 2" do
+  test "Prueba 2-5 de Nora Sandler: Anidando operadores unarios 2" do
     token_list = Lexer.scan_word(File.read!("test/codigoc/nested_ops_2.c"), :no_output);
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) ==
       {:ok, {:program, "program",
@@ -85,4 +84,26 @@ defmodule ParserTest do
                {:negation_Reserveword, "-",
                 {:bitewise_Reserveword, "~", {:constant, 0, {}, {}}, {}}, {}}, {}}, {}}, {}}}
   end
+
+  ### STAGE 3
+
+  #INVALIDAS
+
+  test "Prueba 3-1 de Nora Sandler: Sin punto y coma" do
+    token_list = Lexer.scan_word(File.read!("test/codigoc/sin_semicolo.c"), :no_output);
+    assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintáxis. Se esperaba ; y se encontró: }"}
+  end
+
+  test "Prueba 3-2 de Nora Sandler: Falta el primer operando." do
+    token_list = Lexer.scan_word(File.read!("test/codigoc/falta_primer_oper.c"), :no_output);
+    assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintaxis: Falta el primer operando antes de +."}
+  end
+
+  test "Prueba 3-3 de Nora Sandler: Falta el segundo operando." do
+    token_list = Lexer.scan_word(File.read!("test/codigoc/falta_seg_oper.c"), :no_output);
+    assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró ;."}
+  end
+
+  ##VALIDAS 
+
 end

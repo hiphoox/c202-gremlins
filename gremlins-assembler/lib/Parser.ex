@@ -215,13 +215,13 @@ defmodule Parser do
     end
 
 
-    #Muestra en pantalla el árbol. Finaliza ejecución al devolver la tupla :only_ast
+    #Muestra el árbol. Finaliza ejecución al devolver :only_ast
     def parsing_flag(ast, :show_ast) do
       IO.inspect(ast)
       {:only_ast, ast}
     end
   
-    #Sólo devuelve el árbol al orquestador
+    #Sólo devuelve el árbol 
     def parsing_flag(ast, _) do
       {:ok, ast}
     end

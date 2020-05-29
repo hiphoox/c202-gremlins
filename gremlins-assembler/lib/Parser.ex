@@ -147,7 +147,7 @@ defmodule Parser do
       #recursividad
       case tokens do
         {:error, _} -> [tokens, ""]
-        _ -> if List.fist(tokens) == :multiplication_Reserveword or
+        _ -> if List.first(tokens) == :multiplication_Reserveword or
                 List.first(tokens) == :division_Reserveword do
                 next_fact_term(tokens, node_factor)
               else #cuando no hay multiplicacion o division

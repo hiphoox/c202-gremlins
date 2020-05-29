@@ -47,6 +47,9 @@ defmodule Lexer do
         "!" <> resto -> {:logicalNeg, resto}
         "~" <> resto -> {:bitewise_Reserveword, resto}
         "+" <> resto -> {:add_Reserveword, resto}
+        "*" <> resto -> {:multiplication_Reserveword, resto}
+        "/" <> resto -> {:division_Reserveword, resto}
+        
   
         :error -> {:error, nil}
         #Al no haber coincidencia, inserta el atomo error

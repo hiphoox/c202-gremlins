@@ -73,8 +73,8 @@ defmodule Parser do
     def next_t_exp(tokens, node_term) do
         [tokens, operator] = parse_oper(tokens);
 
-        if operator == :negation_Keyword do
-          operator = :minus_Keyword
+        if operator == :negation_Reserveword do
+          operator = :min_Reserveword
           [tokens, next_term] = parse_term(tokens, operator)
 
           case tokens do 
@@ -118,7 +118,12 @@ defmodule Parser do
         [tokens, node_factor] = pars_factor(tokens, last_op); #oks
         case tokens do
           {:error, _} -> [tokens, ""]
-          _ -> [tokens, node_factor]
+          _ -> if List.first(tokens) == :multiplication_Reserveword or 
+                  List.first(tokens) == :division_Reserveword do
+                  next_fact_term(tokens, node_factor)
+                else #cuando no hay multiplicacion o division
+                  [tokens, node_factor]; 
+                end
         end
       end
 
@@ -142,7 +147,12 @@ defmodule Parser do
       #recursividad
       case tokens do
         {:error, _} -> [tokens, ""]
-        _ -> [tokens, node_factor]
+        _ -> if List.fist(tokens) == :multiplication_Reserveword or
+                List.first(tokens) == :division_Reserveword do
+                next_fact_term(tokens, node_factor)
+              else #cuando no hay multiplicacion o division
+                [tokens, node_factor];
+              end  
       end
     end
 
@@ -154,12 +164,12 @@ defmodule Parser do
 
         case tokens do
           {:error, _} -> [tokens, ""]
-          _ ->   if List.first(tokens) != :close_par do
-              [{:error, "Se esperaba " <> dicc(:close_par) <> "después de la expresión y se encontró " <> dicc(List.first(tokens))}, ""]
-            else
-              tokens=Enum.drop(tokens, 1);
-              [tokens, node_exp];
-            end
+          _ -> if List.first(tokens) != :close_par do
+                [{:error, "Se esperaba " <> dicc(:close_par) <> "después de la expresión y se encontró " <> dicc(List.first(tokens))}, ""]
+              else
+                tokens=Enum.drop(tokens, 1);
+                [tokens, node_exp];
+              end
         end
 
       #Parseando con operador unario
@@ -171,10 +181,10 @@ defmodule Parser do
         else
           case List.first(tokens) do
             {:constant, _} -> parse_constant(tokens, :constant)
-            _ -> if (List.first(tokens)) == :add_Reserveword   do
+            _ -> if (List.first(tokens)) == :add_Reserveword  or (List.first(tokens)) == :multiplication_Reserveword or (List.first(tokens)) == :division_Reserveword do
                   [{:error, "Error de sintaxis: Falta el primer operando antes de " <> dicc(List.first(tokens)) <> "."}, ""]
                 else
-                  if last_op == :addition_Reserveword or last_op == :min_Reserveword do
+                  if last_op == :addition_Reserveword or last_op == :min_Reserveword or last_op == :multiplication_Reserveword or last_op == :division_Reserveword do
                     [{:error, "Error de sintaxis: Falta el segundo operando después de " <> dicc(last_op) <> "."}, ""]
                   else
                     [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> dicc(List.first(tokens)) <> "."}, ""]
@@ -243,6 +253,8 @@ defmodule Parser do
             :add_Reserveword -> "+"
             :return_Reserveword->"return"
             :semicolon->";"
+            :multiplication_Reserveword->"*"
+            :division_Reserveword->"/"
             _ -> "(empty)"
         end
     end

@@ -39,12 +39,18 @@ defmodule Generador do
     """  <> codigo 
   end
 
-  def codigo_gen(:constant, value, codigo, post_stack) do
-      
-      codigo <> """
-          movl $#{value},%eax
-      """
-  end
+def codigo_gen(:constant, value, codigo, post_stack) do
+    if List.first(post_stack) == "+" or List.first(post_stack) == "-" or List.first(post_stack) == "*" or List.first(post_stack) == "/" or List.first(post_stack) == "~"  or List.first(post_stack) == "!" do 
+        codigo <> """
+            movl $#{value},%eax
+        """
+    else 
+        codigo <> """
+            mov  $#{value}, %rax
+            push    %rax
+        """
+    end  
+end
 
   def codigo_gen(:negation_Reserveword, _, codigo, _) do
     codigo <> """
@@ -92,8 +98,22 @@ defmodule Generador do
      codigo <> """
         pop     %rcx
         add     %rcx, %rax
+      """
+  end
+
+  def codigo_gen(:multiplication_Reserveword, _, codigo, _) do
+      codigo <> """
+        pop     %rcx
+        imul    %rcx, %rax
+      """
+  end
+
+  def codigo_gen(:division_Reserveword, _, codigo, _) do
+    codigo <> """
+      pop     %rcx
+      div     %rcx
     """
- end
+  end
 
   def genera_archivo(code,path) do
     asm_path = String.replace_trailing(path, ".c", ".s")

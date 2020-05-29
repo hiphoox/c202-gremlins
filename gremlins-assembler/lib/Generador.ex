@@ -75,12 +75,12 @@ end
   def codigo_gen(:bitewise_Reserveword, _, codigo,post_stack) do
      if List.first(post_stack) == "return" do
        codigo <> """
-           not     %rax
+           not     %eax
        """
      else
        codigo <> """
-           not     %rax
-           push    %rax
+           not     %eax
+           push    %eax
        """
      end
 
@@ -96,24 +96,31 @@ end
 
   def codigo_gen(:add_Reserveword, _, codigo, _) do
      codigo <> """
-        pop     %rcx
-        add     %rcx, %rax
+        pop    %rcx
+        addl   %ecx, %eax
+        push   %rax
       """
   end
 
   def codigo_gen(:multiplication_Reserveword, _, codigo, _) do
       codigo <> """
-        pop     %rcx
-        imul    %rcx, %rax
+        pop    %rcx
+        imul   %ecx, %eax
+        push   %rax
       """
   end
 
   def codigo_gen(:division_Reserveword, _, codigo, _) do
     codigo <> """
-      pop     %rcx
-      div     %rcx
+        push   %rax
+        pop    %rcx
+        pop    %rax
+        xor    %edx, %edx
+        idivl  %ecx
+        push   %rax
     """
   end
+
 
   def genera_archivo(code,path) do
     asm_path = String.replace_trailing(path, ".c", ".s")

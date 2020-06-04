@@ -40,7 +40,12 @@ defmodule Generador do
   end
 
 def codigo_gen(:constant, value, codigo, post_stack) do
-    if List.first(post_stack) == "+" or List.first(post_stack) == "-" or List.first(post_stack) == "*" or List.first(post_stack) == "/" or List.first(post_stack) == "~"  or List.first(post_stack) == "!" do 
+    if List.first(post_stack) == "+" 
+        or List.first(post_stack) == "-" 
+        or List.first(post_stack) == "*" 
+        or List.first(post_stack) == "/" 
+        or List.first(post_stack) == "~"  
+        or List.first(post_stack) == "!" do 
         codigo <> """
             movl $#{value},%eax
         """

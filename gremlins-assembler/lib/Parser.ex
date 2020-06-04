@@ -181,10 +181,14 @@ defmodule Parser do
         else
           case List.first(tokens) do
             {:constant, _} -> parse_constant(tokens, :constant)
-            _ -> if (List.first(tokens)) == :add_Reserveword  or (List.first(tokens)) == :multiplication_Reserveword or (List.first(tokens)) == :division_Reserveword do
+            _ -> if (List.first(tokens)) == :add_Reserveword  
+                  or (List.first(tokens)) == :multiplication_Reserveword 
+                  or (List.first(tokens)) == :division_Reserveword do
                   [{:error, "Error de sintaxis: Falta el primer operando antes de " <> dicc(List.first(tokens)) <> "."}, ""]
                 else
-                  if last_op == :addition_Reserveword or last_op == :min_Reserveword or last_op == :multiplication_Reserveword or last_op == :division_Reserveword do
+                  if last_op == :addition_Reserveword or last_op == :min_Reserveword 
+                    or last_op == :multiplication_Reserveword 
+                    or last_op == :division_Reserveword do
                     [{:error, "Error de sintaxis: Falta el segundo operando después de " <> dicc(last_op) <> "."}, ""]
                   else
                     [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> dicc(List.first(tokens)) <> "."}, ""]

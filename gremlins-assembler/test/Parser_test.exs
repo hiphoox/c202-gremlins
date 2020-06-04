@@ -84,6 +84,13 @@ defmodule ParserTest do
                {:negation_Reserveword, "-",
                 {:bitewise_Reserveword, "~", {:constant, 0, {}, {}}, {}}, {}}, {}}, {}}, {}}}
   end
+  #INVALIDAS
+  test "Prueba 2-6 de Nora Sandler: Operadores desordenados" do
+    token_list = Lexer.scan_word(File.read!("test/codigoc/wrong_order.c"), :no_output);
+    assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintáxis. Falta el siguiente operando después de -."}
+  end
+
+
 
   ### STAGE 3
 
@@ -104,6 +111,7 @@ defmodule ParserTest do
     assert  Parser.parse_token_list(elem(token_list, 1), :no_output) == {:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró ;."}
   end
 
-  ##VALIDAS 
+  ##VALIDAS
+
 
 end

@@ -49,7 +49,15 @@ defmodule Lexer do
         "+" <> resto -> {:add_Reserveword, resto}
         "*" <> resto -> {:multiplication_Reserveword, resto}
         "/" <> resto -> {:division_Reserveword, resto}
-        
+        #Operadores binarios 4 entrega
+        "&&" <> resto -> {:logicalAnd_Reserveword, resto}
+        "||" <> resto -> {:logicalOr_Reserveword, resto}
+        "==" <> resto -> {:equalTo_Reserveword, resto}
+        "!=" <> resto -> {:notEqualTo_Reserveword, resto}
+        "<"  <> resto -> {:lessThan_Reserveword, resto}
+        "<=" <> resto -> {:lessEqual_Reserveword, resto}
+        ">"  <> resto -> {:greaterThan_Reserveword, resto}
+        ">=" <> resto -> {:greaterEqual_Reserveword, resto}
   
         :error -> {:error, nil}
         #Al no haber coincidencia, inserta el atomo error

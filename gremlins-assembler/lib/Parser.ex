@@ -259,6 +259,15 @@ defmodule Parser do
             :semicolon->";"
             :multiplication_Reserveword->"*"
             :division_Reserveword->"/"
+            #Operadores binarios 4ta entrega
+            :logicalAnd_Reserveword->"&&"
+            :logicalOr_Reserveword->"||"
+            :equalTo_Reserveword->"=="
+            :notEqualTo_Reserveword->"!="
+            :lessThan_Reserveword->"<"
+            :lessEqual_Reserveword->"<="
+            :greaterThan_Reserveword->">"
+            :greaterEqual_Reserveword->">="
             _ -> "(empty)"
         end
     end

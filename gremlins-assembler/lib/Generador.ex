@@ -91,41 +91,104 @@ end
 
   end
 
+  # Operadores binarios 3a entrega
   def codigo_gen(:min_Reserveword, _, codigo, _) do
      codigo <> """
         pop     %rcx
         sub     %rax, %rcx
         mov     %rcx, %rax
-    """
+      """
   end
 
   def codigo_gen(:add_Reserveword, _, codigo, _) do
      codigo <> """
         pop    %rcx
-        addl   %ecx, %eax
-        push   %rax
+        add    %rcx, %rax
       """
   end
 
   def codigo_gen(:multiplication_Reserveword, _, codigo, _) do
       codigo <> """
         pop    %rcx
-        imul   %ecx, %eax
-        push   %rax
+        imul   %rcx, %rax
       """
   end
 
   def codigo_gen(:division_Reserveword, _, codigo, _) do
     codigo <> """
-        push   %rax
-        pop    %rcx
-        pop    %rax
-        xor    %edx, %edx
-        idivl  %ecx
-        push   %rax
+        pop   %rcx
+        div   %rcx
     """
   end
 
+  #Operadores binarios 4ta entrega
+
+  # Operador "=="
+  def codigo_gen(:equalTo_Reserveword, _, codigo, _) do
+      codigo <> """
+          push %rax
+          pop %rbx
+          cmp %rax, %rbx
+          mov $0, %rax
+          sete %al
+      """
+  end
+
+  # Operador "!="
+  def codigo_gen(:notEqualTo_Reserveword, _, codigo, _) do
+    codigo <> """
+        push %rax
+        pop %rbx
+        cmp %rax, %rbx
+        mov $0, %rax
+        setne %al
+    """
+  end
+
+  # Operador "<"
+  def code_gen(:lessThan_Reserveword, _, codigo, _) do
+    codigo <> """
+        push %rax
+        pop %rbx
+        cmp %rax, %rbx
+        mov $0, %rax
+        setl %al
+    """
+  end
+
+  # Operador "<="
+  def code_gen(:lessEqual_Reserveword, _, codigo, _) do
+    codigo <> """
+        push %rax
+        pop %rbx
+        cmp %rax, %rbx
+        mov $0, %rax
+        setle %al
+    """
+  end
+
+  # Operador ">"
+  def code_gen(:greaterThan_Reserveword, _, codigo, _) do
+    codigo <> """
+        push %rax
+        pop %rbx
+        cmp %rax, %rbx
+        mov $0, %rax
+        setg %al
+    """
+  end
+
+  # Operador ">="
+  def code_gen(:greaterEqual_Reserveword, _, codigo, _) do
+    codigo <> """
+        push %rax
+        pop %rbx
+        cmp %rax, %rbx
+        mov $0, %rax
+        setge %al
+    """
+  end
+  #######################################################################################
 
   def genera_archivo(code,path) do
     asm_path = String.replace_trailing(path, ".c", ".s")

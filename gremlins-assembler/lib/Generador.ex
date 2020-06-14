@@ -92,6 +92,8 @@ end
   end
 
   # Operadores binarios 3a entrega
+  
+  # Operador "-"
   def codigo_gen(:min_Reserveword, _, codigo, _) do
      codigo <> """
         pop     %rcx
@@ -100,6 +102,7 @@ end
       """
   end
 
+  # Operador "+"
   def codigo_gen(:add_Reserveword, _, codigo, _) do
      codigo <> """
         pop    %rcx
@@ -107,6 +110,7 @@ end
       """
   end
 
+  # Operador "*"
   def codigo_gen(:multiplication_Reserveword, _, codigo, _) do
       codigo <> """
         pop    %rcx
@@ -114,6 +118,7 @@ end
       """
   end
 
+  #Operador "/"
   def codigo_gen(:division_Reserveword, _, codigo, _) do
     codigo <> """
         pop   %rcx

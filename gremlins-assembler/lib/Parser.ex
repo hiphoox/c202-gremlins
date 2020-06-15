@@ -22,9 +22,9 @@ defmodule Parser do
       {_atom, _value, tokens} = parse(tokens, :close_brace)
       
       case tokens do
-        {:error, _} -> [tokens, ""]
+        {:error, _} -> [tokens, ""] # Si hay error no se construye el nodo
         
-        _ -> [tokens, {:function, "main", state_node, {}}]
+        _ -> [tokens, {:function, "main", state_node, {}}]# Si no hay, se pasa la lista con el nodo
       end
     end
 
@@ -33,7 +33,8 @@ defmodule Parser do
       case token do
         {:error, _} -> {"", "", token};
         _ -> if List.first(token) == atom do
-                {atom, "", Enum.drop(token, 1)}
+                {atom, "", Enum.drop(token, 1)} # Borra el elemento erróneo del enumerable
+                # que no pertenece a los atomos ni al diccionario
              else
                 {"", "", {:error, "Error de sintáxis. Se esperaba "<> dicc(atom) <>" y se encontró: " <> dicc(List.first(token))}}
              end
@@ -73,6 +74,8 @@ defmodule Parser do
     def next_t_exp(tokens, node_term) do
         [tokens, operator] = parse_oper(tokens);
 
+        # Se cambia el operador unario negación por el 
+        # operador binario resta
         if operator == :negation_Reserveword do
           operator = :min_Reserveword
           [tokens, next_term] = parse_term(tokens, operator)

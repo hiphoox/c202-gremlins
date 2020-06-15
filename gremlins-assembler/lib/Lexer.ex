@@ -50,7 +50,7 @@ defmodule Lexer do
         "*" <> resto -> {:multiplication_Reserveword, resto}
         "/" <> resto -> {:division_Reserveword, resto}
         #Agregando operador resta (min_Reserveword) en lexer
-        "-" <> resto -> {:min_Reserveword, resto}
+        #"-" <> resto -> {:min_Reserveword, resto}
         #Operadores binarios 4 entrega
         "&&" <> resto -> {:logicalAnd_Reserveword, resto}
         "||" <> resto -> {:logicalOr_Reserveword, resto}

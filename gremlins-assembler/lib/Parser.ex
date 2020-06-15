@@ -247,19 +247,22 @@ defmodule Parser do
     #Diccionario utilizado para transformar los Reserveword a caractéres.
     def dicc(atom)do
         case atom do
+            #Tokens iniciales 1a entrega
             :int_Reserveword->"int"
             :main_Reserveword->"main"
             :open_par->"("
             :close_par->")"
             :open_brace->"{"
             :close_brace->"}"
-            :logicalNeg->"!"
-            :bitewise_Reserveword -> "~"
-            :negation_Reserveword->"-"
-            :min_Reserveword -> "-"
-            :add_Reserveword -> "+"
             :return_Reserveword->"return"
             :semicolon->";"
+            #Operadores unarios 2a entrega
+            :negation_Reserveword->"-"
+            :bitewise_Reserveword -> "~"
+            :logicalNeg->"!"
+            #Operadores binarios 3a entrega
+            :min_Reserveword -> "-"
+            :add_Reserveword -> "+"
             :multiplication_Reserveword->"*"
             :division_Reserveword->"/"
             #Operadores binarios 4ta entrega

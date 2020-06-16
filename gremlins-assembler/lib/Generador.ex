@@ -40,16 +40,22 @@ defmodule Generador do
   end
 
 def codigo_gen(:constant, value, codigo, post_stack) do
-    if List.first(post_stack) == "+" or List.first(post_stack) == "-" or List.first(post_stack) == "*" or List.first(post_stack) == "/" or List.first(post_stack) == "~"  or List.first(post_stack) == "!" do 
-        codigo <> """
-            movl $#{value},%eax
-        """
-    else 
-        codigo <> """
-            mov  $#{value}, %rax
-            push    %rax
-        """
-    end  
+    if "+" in post_stack or "-" in post_stack or "*" in post_stack or "/" in post_stack do 
+        if List.first(post_stack) == "+" or List.first(post_stack) == "-" or List.first(post_stack) == "*" or List.first(post_stack) == "/" or List.first(post_stack) == "~"  or List.first(post_stack) == "!" do 
+            codigo <> """
+                movl $#{value},%eax
+            """
+        else 
+            codigo <> """
+                mov  $#{value}, %eax
+                push    %rax
+            """
+        end  
+    else
+      codigo <> """
+          movl $#{value},%eax
+      """
+    end
 end
 
   def codigo_gen(:negation_Reserveword, _, codigo, _) do
@@ -96,28 +102,22 @@ end
 
   def codigo_gen(:add_Reserveword, _, codigo, _) do
      codigo <> """
-        pop    %rcx
-        addl   %ecx, %eax
-        push   %rax
+          pop     %rcx
+          add     %rcx, %rax
       """
   end
 
   def codigo_gen(:multiplication_Reserveword, _, codigo, _) do
       codigo <> """
-        pop    %rcx
-        imul   %ecx, %eax
-        push   %rax
+          pop    %rcx
+          imul    %rcx, %rax
       """
   end
 
   def codigo_gen(:division_Reserveword, _, codigo, _) do
     codigo <> """
-        push   %rax
-        pop    %rcx
-        pop    %rax
-        xor    %edx, %edx
-        idivl  %ecx
-        push   %rax
+        pop     %rcx
+        div     %rcx
     """
   end
 

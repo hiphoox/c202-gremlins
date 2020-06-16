@@ -116,6 +116,7 @@ defmodule Parser do
         end
       end #end
 
+      # PARSE TERM para manejar ("*" | "/")
       def parse_term(tokens, last_op) do
         #envia el operador parseado con anterioridad por si ocurre un error
         [tokens, node_factor] = pars_factor(tokens, last_op); #oks
@@ -130,15 +131,17 @@ defmodule Parser do
         end
       end
 
-     def parse_constant(token, atom) do
-      case token do
-        {:error, _} -> {"", "", token};
-        _ -> if elem(List.first(token), 0) == atom do
-                [Enum.drop(token, 1), {elem(List.first(token),0), elem(List.first(token),1),{},{}}]
-             else
-                #{"", "", {:error, "Error de sintáxis. Constante inválida."}}
-            end
+      def parse_constant(token, atom) do
+          case token do
+            {:error, _} -> {"", "", token};
+            _ -> if elem(List.first(token), 0) == atom do
+                    [Enum.drop(token, 1), {elem(List.first(token),0), elem(List.first(token),1),{},{}}]
+                  else
+                    #{"", "", {:error, "Error de sintáxis. Constante inválida."}}
+                  end
+          end      
       end
+
     end
 
     def next_fact_term(tokens, node_factor)  do
@@ -159,6 +162,7 @@ defmodule Parser do
       end
     end
 
+    ## PARSE FACTOR para manejar <unary_op>: Negation -, Bitwise complement ~ Logical negation !
     def pars_factor(tokens, last_op) do
       #Parsea tokens dentro de los parentesis
       if List.first(tokens) == :open_par do
@@ -175,7 +179,7 @@ defmodule Parser do
               end
         end
 
-      #Parseando con operador unario
+        #Parseando con operador unario
       else if List.first(tokens) == :negation_Reserveword or List.first(tokens) == :bitewise_Reserveword or List.first(tokens) == :logicalNeg  do
           [tokens, operator] = parse_oper(tokens);
           [tokens, factor] = pars_factor(tokens, "")
@@ -189,7 +193,8 @@ defmodule Parser do
                   or (List.first(tokens)) == :division_Reserveword do
                   [{:error, "Error de sintaxis: Falta el primer operando antes de " <> dicc(List.first(tokens)) <> "."}, ""]
                 else
-                  if last_op == :addition_Reserveword or last_op == :min_Reserveword 
+                  if last_op == :addition_Reserveword 
+                    or last_op == :min_Reserveword 
                     or last_op == :multiplication_Reserveword 
                     or last_op == :division_Reserveword do
                     [{:error, "Error de sintaxis: Falta el segundo operando después de " <> dicc(last_op) <> "."}, ""]

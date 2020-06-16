@@ -1,0 +1,88 @@
+* [33m7733918[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;33mtag: v2.0.0[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Se agrega documentación de entrega 3
+* [33m464d3b0[m Agregando operadores binarios a lexer, parser y generador
+*   [33m090758f[m Merge branch 'master' of https://github.com/hiphoox/c202-gremlins
+[32m|[m[33m\[m  
+[32m|[m *   [33ma640afd[m Merge pull request #4 from hiphoox/Rama-Tester
+[32m|[m [34m|[m[35m\[m  
+[32m|[m [34m|[m * [33mc3f280d[m[33m ([m[1;31morigin/Rama-Tester[m[33m)[m +Estructurando pruebas, agregando pruebas 3 entrega
+[32m|[m * [35m|[m [33mb4b2d1d[m Requerimientos Gremlins
+[32m|[m [35m|[m[35m/[m  
+* [35m/[m [33m5e6dfc1[m Mejorando comments
+[35m|[m[35m/[m  
+*   [33mdc72631[m Merge branch 'master' of https://github.com/hiphoox/c202-gremlins
+[36m|[m[1;31m\[m  
+[36m|[m *   [33mf9b29ea[m Merge pull request #3 from hiphoox/Rama-Modificaciones
+[36m|[m [1;32m|[m[1;33m\[m  
+[36m|[m [1;32m|[m * [33m1b21d6a[m[33m ([m[1;31morigin/Rama-Modificaciones[m[33m)[m +Agregando codigo en x86 para suma y resta
+[36m|[m [1;32m|[m * [33meaa39ec[m +Corrigiendo bugs
+[36m|[m [1;32m|[m * [33mfbf77f8[m +Corrigiendo bugs
+[36m|[m [1;32m|[m * [33me19f283[m +Agregando operadores binarios
+[36m|[m [1;32m|[m * [33m218721e[m +Agregando operadores binarios y gramatica mejorada a Parser
+[36m|[m [1;32m|[m * [33m19b8770[m +Agregando operadores unarios a biblioteca de valores parser
+[36m|[m [1;32m|[m * [33m67b06c2[m +Agregando operadores como tokens
+[36m|[m [1;32m|[m * [33m2da1963[m +Agregando nueva estructura a parser
+[36m|[m [1;32m|[m * [33m9fad698[m[33m ([m[1;33mtag: v1.0.0[m[33m, [m[1;32mRama-Modificaciones[m[33m)[m Se agrego documentación que explica las herramientas utilizadas en el proyecto y el rol de cada integrante
+* [1;32m|[m [1;33m|[m [33m5aa0bc5[m +Agregando config generador
+[1;32m|[m[1;32m/[m [1;33m/[m  
+* [1;33m|[m   [33mca17806[m Merge branch 'master' of https://github.com/hiphoox/c202-gremlins
+[1;34m|[m[1;35m\[m [1;33m\[m  
+[1;34m|[m * [1;33m|[m [33m6287998[m Se agrega presentacion para la segunda entrega del compilador
+* [1;35m|[m [1;33m|[m [33ma801a5f[m +Cambios en main
+[1;35m|[m[1;35m/[m [1;33m/[m  
+* [1;33m|[m [33m5f8c760[m Corrigiendo bugs
+* [1;33m|[m [33m4d02b4c[m Agregando instrucciones de compilacion
+* [1;33m|[m [33mbfb3a5f[m Agregando pruebas válidas de operadores unarios para segunda entrega
+* [1;33m|[m [33m009c112[m Agregando pruebas de operadores unarios para segunda entrega
+[1;33m|[m[1;33m/[m  
+* [33m5d5e98f[m Agregate bitewise operator
+* [33m4d117a1[m Agrego documentacion para la entrega 2 del compilador
+* [33m0693efe[m Fixing Bugs from Code Generator
+* [33med962a3[m Fixing Bugs
+* [33mfc32a4f[m Agregamos parser con operador negación , aunado a contante para crear arbol
+* [33m6c52b6a[m Agregando Parser de operadores unarios
+* [33m1a215c1[m Agregando negación al Generador de código
+* [33m037991e[m Agregando negación al analisis Lexico
+* [33m4c8c808[m -Agregando el Linker
+* [33mfcedd0b[m Agregando detalles al generador
+* [33m8197709[m Corrigiendo bugs Generador de Código
+* [33mb272e71[m Agregando Generador a Aqreuitectura
+* [33m67918c7[m Agregando generador de Código
+* [33m75efcf0[m Acoplando arquitectura
+* [33m7df2652[m Agregando README
+* [33ma173ea6[m Agregando README code
+*   [33m1fedb60[m Corriendo git
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33m9c6e526[m Update README.md
+* [31m|[m [33m38418de[m Agregando README code
+[31m|[m[31m/[m  
+* [33m1c6e20f[m Agregando más pruebas y corrigiendo bugs
+* [33mcb829d5[m Agregando otra prueba
+* [33me425968[m Quitando entrega
+* [33m43ff5eb[m Agrego presentación para primer entrega
+* [33m6b996e5[m Corrigiendo bugs en organizer
+* [33m001245a[m Corrigiendo comentarios
+* [33mdb46c9e[m Agregando pruebas de Nora para Parser 1era parte
+* [33mac5414b[m Renombrando carpetas
+* [33m8df803a[m Renombrando carpetas
+* [33m0b54eea[m Agregando pruebas a scanner
+* [33mc566b88[m Arreglando bugs1.0 parser
+* [33m3cca970[m Arreglando bugs parser
+* [33m54947fe[m Agregando más funcionalidad al arbol
+* [33mca501a4[m Agregando primera parte Parser
+* [33m75b98c5[m Agregando commentarios al código
+* [33m937f9eb[m Agregando scripts de test
+* [33m348cc45[m Agregando pruebas
+* [33m4f4ae27[m Agregando arquitectura
+* [33m310101b[m agregando arquitectura
+*   [33m33da396[m Merge pull request #2 from Ricardo191998/master
+[32m|[m[33m\[m  
+[32m|[m * [33mfb1b91c[m Agregando Analizador Lexico y Scanner
+[32m|[m[32m/[m  
+*   [33m413e2f8[m Merge pull request #1 from eduardo21312/master
+[34m|[m[35m\[m  
+[34m|[m * [33m32917dd[m Agregando Documentacion
+[34m|[m[34m/[m  
+* [33mf340ef6[m Se agregó código para leer ruta de archivos
+* [33mf70a3f8[m Dandole orden al proyrecto
+* [33m725f1e4[m Borrando README no funcional
+* [33mf6f08fc[m Iniciando proyecto

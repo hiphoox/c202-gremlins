@@ -6,7 +6,7 @@ defmodule Lexer do
     case words do
       [""] -> {:error, "Error. Archivo código fuente vacío."}
         _ ->  start_lexing(words, flag) #Comenzamos con tokenlist
-    #devuelve la lista de tokens 
+    #devuelve la lista de tokens
     end
   end
 
@@ -21,9 +21,9 @@ defmodule Lexer do
        if flag == :show_token do
 
         IO.inspect(token_list)
-      
+
          {:only_tokens, token_list}
-     
+
        else
 
          {:ok, token_list}
@@ -32,7 +32,7 @@ defmodule Lexer do
   end
 
 
-  def lex_raw_tokens(program) when program != "" do 
+  def lex_raw_tokens(program) when program != "" do
     {token, resto} =
     case program do
         "{" <> resto -> {:open_brace, resto}
@@ -49,8 +49,18 @@ defmodule Lexer do
         "+" <> resto -> {:add_Reserveword, resto}
         "*" <> resto -> {:multiplication_Reserveword, resto}
         "/" <> resto -> {:division_Reserveword, resto}
-        
-  
+        #Agregando operador resta (min_Reserveword) en lexer
+        #"-" <> resto -> {:min_Reserveword, resto}
+        #Operadores binarios 4 entrega
+        "&&" <> resto -> {:logicalAnd_Reserveword, resto}
+        "||" <> resto -> {:logicalOr_Reserveword, resto}
+        "==" <> resto -> {:equalTo_Reserveword, resto}
+        "!=" <> resto -> {:notEqualTo_Reserveword, resto}
+        "<"  <> resto -> {:lessThan_Reserveword, resto}
+        "<=" <> resto -> {:lessEqual_Reserveword, resto}
+        ">"  <> resto -> {:greaterThan_Reserveword, resto}
+        ">=" <> resto -> {:greaterEqual_Reserveword, resto}
+
         :error -> {:error, nil}
         #Al no haber coincidencia, inserta el atomo error
         #si se encontró un error, guarda en cadena restante {:error, resto}

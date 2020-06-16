@@ -22,9 +22,9 @@ defmodule Parser do
       {_atom, _value, tokens} = parse(tokens, :close_brace)
       
       case tokens do
-        {:error, _} -> [tokens, ""]
+        {:error, _} -> [tokens, ""] # Si hay error no se construye el nodo
         
-        _ -> [tokens, {:function, "main", state_node, {}}]
+        _ -> [tokens, {:function, "main", state_node, {}}]# Si no hay, se pasa la lista con el nodo
       end
     end
 
@@ -33,7 +33,8 @@ defmodule Parser do
       case token do
         {:error, _} -> {"", "", token};
         _ -> if List.first(token) == atom do
-                {atom, "", Enum.drop(token, 1)}
+                {atom, "", Enum.drop(token, 1)} # Borra el elemento erróneo del enumerable
+                # que no pertenece a los atomos ni al diccionario
              else
                 {"", "", {:error, "Error de sintáxis. Se esperaba "<> dicc(atom) <>" y se encontró: " <> dicc(List.first(token))}}
              end
@@ -73,6 +74,8 @@ defmodule Parser do
     def next_t_exp(tokens, node_term) do
         [tokens, operator] = parse_oper(tokens);
 
+        # Se cambia el operador unario negación por el 
+        # operador binario resta
         if operator == :negation_Reserveword do
           operator = :min_Reserveword
           [tokens, next_term] = parse_term(tokens, operator)
@@ -181,10 +184,14 @@ defmodule Parser do
         else
           case List.first(tokens) do
             {:constant, _} -> parse_constant(tokens, :constant)
-            _ -> if (List.first(tokens)) == :add_Reserveword  or (List.first(tokens)) == :multiplication_Reserveword or (List.first(tokens)) == :division_Reserveword do
+            _ -> if (List.first(tokens)) == :add_Reserveword  
+                  or (List.first(tokens)) == :multiplication_Reserveword 
+                  or (List.first(tokens)) == :division_Reserveword do
                   [{:error, "Error de sintaxis: Falta el primer operando antes de " <> dicc(List.first(tokens)) <> "."}, ""]
                 else
-                  if last_op == :addition_Reserveword or last_op == :min_Reserveword or last_op == :multiplication_Reserveword or last_op == :division_Reserveword do
+                  if last_op == :addition_Reserveword or last_op == :min_Reserveword 
+                    or last_op == :multiplication_Reserveword 
+                    or last_op == :division_Reserveword do
                     [{:error, "Error de sintaxis: Falta el segundo operando después de " <> dicc(last_op) <> "."}, ""]
                   else
                     [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> dicc(List.first(tokens)) <> "."}, ""]
@@ -240,21 +247,33 @@ defmodule Parser do
     #Diccionario utilizado para transformar los Reserveword a caractéres.
     def dicc(atom)do
         case atom do
+            #Tokens iniciales 1a entrega
             :int_Reserveword->"int"
             :main_Reserveword->"main"
             :open_par->"("
             :close_par->")"
             :open_brace->"{"
             :close_brace->"}"
-            :logicalNeg->"!"
-            :bitewise_Reserveword -> "~"
-            :negation_Reserveword->"-"
-            :min_Reserveword -> "-"
-            :add_Reserveword -> "+"
             :return_Reserveword->"return"
             :semicolon->";"
+            #Operadores unarios 2a entrega
+            :negation_Reserveword->"-"
+            :bitewise_Reserveword -> "~"
+            :logicalNeg->"!"
+            #Operadores binarios 3a entrega
+            :min_Reserveword -> "-"
+            :add_Reserveword -> "+"
             :multiplication_Reserveword->"*"
             :division_Reserveword->"/"
+            #Operadores binarios 4ta entrega
+            :logicalAnd_Reserveword->"&&"
+            :logicalOr_Reserveword->"||"
+            :equalTo_Reserveword->"=="
+            :notEqualTo_Reserveword->"!="
+            :lessThan_Reserveword->"<"
+            :lessEqual_Reserveword->"<="
+            :greaterThan_Reserveword->">"
+            :greaterEqual_Reserveword->">="
             _ -> "(empty)"
         end
     end

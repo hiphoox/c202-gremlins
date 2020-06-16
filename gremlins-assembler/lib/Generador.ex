@@ -151,7 +151,7 @@ end
   end
 
   # Operador binario "||"
-   def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
+  def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
     # Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
     #  que contiene la clausula Or
     list1 = Regex.scan(~r/clause_or\d{1,}/, codigo)

@@ -139,7 +139,7 @@ defmodule Parser do
                   else
                     #{"", "", {:error, "Error de sintáxis. Constante inválida."}}
                   end
-          end      
+          #end      
       end
 
     end
@@ -218,17 +218,17 @@ defmodule Parser do
       [tokens, operator];
     end
 
-#funcion que parsea el operador unario
+    #funcion que parsea el operador unario
     def parse_un_ops(token, atom) do
       case token do
         {:error, _} -> {"", "", token}; 
-        _ -> if List.first(token) == atom do
+        _ ->  if List.first(token) == atom do
                 remain=Enum.drop(token, 1) 
                 [token, inner_exp] = parse_express(remain)
                 [token, {atom, dicc(atom), inner_exp,{}}]
-            else
+              else
                 [{:error, ""}, ""]
-            end
+              end
       end
     end
 

@@ -162,6 +162,24 @@ end
       """
   end
 
+  # PROPUESTA DE GENERACIÓN AND
+  #def codigo_gen(:logicalAnd_Reserveword, _, codigo, _) do 
+    #codigo <>
+    #"""
+            #cmpl $0, %eax
+            #jne   _clause2
+            #jmp   _end
+
+        #_clause2:
+            #cmpl  $0, %eax
+            #movl  $0, %eax
+            #setne %al
+
+        #_end:
+    #"""
+  #end  
+
+
   # Operador binario "||"
   def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
     # Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
@@ -184,6 +202,23 @@ end
       """
   end
 
+  # PROPUESTA DE GENERACIÓN OR
+  #def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
+    #codigo <> 
+      #"""
+              #cmpl $0, %eax
+              #jne   _clause2
+              #jmp   _end
+
+          #_clause2:
+              #cmpl  $0, %eax
+              #movl  $0, %eax
+              #setne %al
+
+          #_end:
+      #"""
+  #end 
+    
 
   # Operador "=="
   def codigo_gen(:equalTo_Reserveword, _, codigo, _) do

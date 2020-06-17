@@ -142,47 +142,47 @@ end
   #Operadores binarios 4ta entrega
 
   # # Operador binario "&&"
-  # def codigo_gen(:logicalAnd_Reserveword, _, codigo, _) do
-  #   #  Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
-  #   #  que contiene la clausula And
-  #   list1 = Regex.scan(~r/clause_and\d{1,}/, codigo)
-  #   list2 = Regex.scan(~r/clause_and\d{1,}/, codigo)
-  #   number = Integer.to_string(length(list1) + length(list2) + 1)
+  def codigo_gen(:logicalAnd_Reserveword, _, codigo, _) do
+    #  Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
+    #  que contiene la clausula And
+    one = Regex.scan(~r/clause_and\d{1,}/, codigo)
+    two = Regex.scan(~r/clause_and\d{1,}/, codigo)
+    number = Integer.to_string(length(one) + length(two) + 1)
 
-  #   codigo <>
-  #     """
-  #               cmp $0, %rax
-  #               jne clause_and#{num}
-  #               jmp end_and#{num}
-  #           clause_and#{num}:
-  #               cmp $0, %rax
-  #               mov $0, %rax
-  #               setne %al
-  #           end_and#{num}:
-  #     """
-  # end
+    codigo <>
+      """
+                cmp $0, %rax
+                jne clause_and#{number}
+                jmp end_and#{number}
+            clause_and#{number}:
+                cmp $0, %rax
+                mov $0, %rax
+                setne %al
+            end_and#{number}:
+      """
+  end
 
   # Operador binario "||"
-  # def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
-  #   # Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
-  #   #  que contiene la clausula Or
-  #   list1 = Regex.scan(~r/clause_or\d{1,}/, codigo)
-  #   list2 = Regex.scan(~r/clause_or\d{1,}/, codigo)
-  #   number = Integer.to_string(length(list1) + length(list2) + 1)
+  def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
+    # Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
+    #  que contiene la clausula Or
+    one = Regex.scan(~r/clause_or\d{1,}/, codigo)
+    two = Regex.scan(~r/clause_or\d{1,}/, codigo)
+    number = Integer.to_string(length(one) + length(two) + 1)
 
-  #   codigo <>
-  #     """
-  #               cmp $0, %rax
-  #               je clause_or#{num}
-  #               mov $1,%rax
-  #               jmp end_or#{num}
-  #           clause_or#{num}:
-  #               cmp $0, %rax
-  #               mov $0, %rax
-  #               setne %al
-  #           end_or#{num}:
-  #     """
-  # end
+    codigo <>
+      """
+                cmp $0, %rax
+                je clause_or#{number}
+                mov $1,%rax
+                jmp end_or#{number}
+            clause_or#{number}:
+                cmp $0, %rax
+                mov $0, %rax
+                setne %al
+            end_or#{number}:
+      """
+  end
 
 
   # Operador "=="

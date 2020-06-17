@@ -126,6 +126,8 @@ defmodule Parser do
                   List.first(tokens) == :division_Reserveword or
                   List.first(tokens) == :notEqualTo_Reserveword or 
                   List.first(tokens) == :equalTo_Reserveword or
+                  List.first(tokens) == :logicalAnd_Reserveword or
+                  List.first(tokens) == :logicalOr_Reserveword or
                   List.first(tokens) == :lessThan_Reserveword or
                   List.first(tokens) == :lessEqual_Reserveword  or 
                   List.first(tokens) == :greaterThan_Reserveword or
@@ -162,6 +164,8 @@ defmodule Parser do
                 List.first(tokens) == :lessThan_Reserveword or
                 List.first(tokens) == :notEqualTo_Reserveword or 
                 List.first(tokens) == :equalTo_Reserveword or
+                List.first(tokens) == :logicalAnd_Reserveword or 
+                List.first(tokens) == :logicalOr_Reserveword or
                 List.first(tokens) == :lessEqual_Reserveword  or 
                 List.first(tokens) == :greaterThan_Reserveword or
                 List.first(tokens) == :greaterEqual_Reserveword  do
@@ -201,6 +205,8 @@ defmodule Parser do
             _ -> if (List.first(tokens)) == :add_Reserveword  
                   or (List.first(tokens)) == :multiplication_Reserveword 
                   or (List.first(tokens)) == :division_Reserveword
+                  or (List.first(tokens)) == :logicalAnd_Reserveword
+                  or (List.first(tokens)) == :logicalOr_Reserveword
                   or (List.first(tokens)) == :notEqualTo_Reserveword
                   or (List.first(tokens)) == :equalTo_Reserveword
                   or (List.first(tokens)) == :lessThan_Reserveword
@@ -213,6 +219,8 @@ defmodule Parser do
                     or last_op == :min_Reserveword 
                     or last_op == :multiplication_Reserveword
                     or last_op == :notEqualTo_Reserveword
+                    or last_op == :logicalAnd_Reserveword
+                    or last_op == :logicalOr_Reserveword
                     or last_op == :equalTo_Reserveword
                     or last_op == :lessThan_Reserveword
                     or last_op == :lessEqual_Reserveword

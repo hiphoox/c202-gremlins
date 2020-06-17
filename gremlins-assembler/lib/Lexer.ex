@@ -51,8 +51,8 @@ defmodule Lexer do
         #Agregando operador resta (min_Reserveword) en lexer
         #"-" <> resto -> {:min_Reserveword, resto}
         #Operadores binarios 4 entrega
-        "&&" <> resto -> {:logicalAnd_Reserveword, resto}
-        "||" <> resto -> {:logicalOr_Reserveword, resto}
+        "&" <> resto -> {:logicalAnd_Reserveword, resto}
+        "|" <> resto -> {:logicalOr_Reserveword, resto}
         "="  <> resto -> {:equal_Reserveword, resto}
         "<"  <> resto -> {:lessThan_Reserveword, resto}
         ">"  <> resto -> {:greaterThan_Reserveword, resto}
@@ -74,6 +74,20 @@ defmodule Lexer do
             end
         else
             {token, resto}
+        end 
+
+        {token, resto} = 
+        if token == :logicalAnd_Reserveword and List.first(tl String.split(resto, "")) == "&" do
+            {:logicalAnd_Reserveword, String.replace(resto, "&", "")}
+        else
+          {token, resto}
+        end 
+
+        {token, resto} = 
+        if token == :logicalOr_Reserveword and List.first(tl String.split(resto, "")) == "|" do
+            {:logicalOr_Reserveword, String.replace(resto, "|", "")}
+        else
+          {token, resto}
         end 
 
         tokens_faltantes = lex_raw_tokens(resto)

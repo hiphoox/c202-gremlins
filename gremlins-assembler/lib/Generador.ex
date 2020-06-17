@@ -140,13 +140,13 @@ end
     codigo <>
       """
                 cmp $0, %rax
-                jne clause_and#{num}
-                jmp end_and#{num}
-            clause_and#{num}:
+                jne clause_and#{number}
+                jmp end_and#{number}
+            clause_and#{number}:
                 cmp $0, %rax
                 mov $0, %rax
                 setne %al
-            end_and#{num}:
+            end_and#{number}:
       """
   end
 
@@ -161,14 +161,14 @@ end
     codigo <>
       """
                 cmp $0, %rax
-                je clause_or#{num}
+                je clause_or#{number}
                 mov $1,%rax
-                jmp end_or#{num}
-            clause_or#{num}:
+                jmp end_or#{number}
+            clause_or#{number}:
                 cmp $0, %rax
                 mov $0, %rax
                 setne %al
-            end_or#{num}:
+            end_or#{number}:
       """
   end
 

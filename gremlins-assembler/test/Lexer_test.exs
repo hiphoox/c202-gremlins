@@ -108,6 +108,35 @@ defmodule LexerTest do
     assert Lexer.scan_word(File.read!("test/codigoc/returnenmayusculas.c"), :no_output) == {:error, "Error léxico."}
   end
 
+ ## AGREGANDO PRUEBAS
+
+  test "Prueba 1-8 : Aceptando operador unario - " do
+    assert Lexer.scan_word(File.read!("test/codigoc/negacion.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      :negation_Reserveword,
+      {:constant, 5},
+      :semicolon,
+      :close_brace]}
+  end
+
+  #test "Prueba 1-9 : Aceptando operador unario  " do
+    #assert Lexer.scan_word(File.read!("test/codigoc/not_ten.c"), :no_output) == {:ok, [
+      #:int_Reserveword,
+      #:main_Reserveword,
+      #:open_par,
+      #:close_par,
+      #:open_brace,
+      #:return_Reserveword,
+      #:logicalNeg_Reserveword,
+      #{:constant, 10},
+      #:semicolon,
+      #:close_brace]}
+  #end
 
 
 end

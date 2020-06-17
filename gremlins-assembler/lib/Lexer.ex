@@ -20,8 +20,6 @@ defmodule Lexer do
     else
        if flag == :show_token do
 
-        IO.inspect(token_list)
-
          {:only_tokens, token_list}
 
        else
@@ -33,6 +31,7 @@ defmodule Lexer do
 
 
   def lex_raw_tokens(program) when program != "" do
+    #IO.puts(program)
     {token, resto} =
     case program do
         "{" <> resto -> {:open_brace, resto}
@@ -54,12 +53,9 @@ defmodule Lexer do
         #Operadores binarios 4 entrega
         "&&" <> resto -> {:logicalAnd_Reserveword, resto}
         "||" <> resto -> {:logicalOr_Reserveword, resto}
-        "==" <> resto -> {:equalTo_Reserveword, resto}
-        "!=" <> resto -> {:notEqualTo_Reserveword, resto}
+        "="  <> resto -> {:equal_Reserveword, resto}
         "<"  <> resto -> {:lessThan_Reserveword, resto}
-        "<=" <> resto -> {:lessEqual_Reserveword, resto}
         ">"  <> resto -> {:greaterThan_Reserveword, resto}
-        ">=" <> resto -> {:greaterEqual_Reserveword, resto}
 
         :error -> {:error, nil}
         #Al no haber coincidencia, inserta el atomo error
@@ -67,14 +63,27 @@ defmodule Lexer do
         resto -> get_constant_chk_error(resto)
         end
 
+        {token, resto} = 
+        if List.first(tl String.split(resto, "")) == "=" do
+            case token do 
+                :lessThan_Reserveword -> {:lessEqual_Reserveword,String.replace(resto, "=", "")}
+                :greaterThan_Reserveword -> {:greaterEqual_Reserveword,String.replace(resto, "=", "")}
+                :logicalNeg  ->  {:notEqualTo_Reserveword,String.replace(resto, "=", "")}
+                {:constant,_}  ->  {token, resto}
+                :equal_Reserveword  -> {:equalTo_Reserveword,String.replace(resto, "=", "")}
+            end
+        else
+            {token, resto}
+        end 
+
         tokens_faltantes = lex_raw_tokens(resto)
         [token | tokens_faltantes]
-
+       
   end
 
-    def lex_raw_tokens(_program) do
-      []
-    end
+  def lex_raw_tokens(_program) do
+    []
+  end
 
   def get_constant_chk_error(remain_string) do
     #Constante o cadena no valida, procesar

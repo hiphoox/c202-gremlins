@@ -123,7 +123,13 @@ defmodule Parser do
         case tokens do
           {:error, _} -> [tokens, ""]
           _ -> if List.first(tokens) == :multiplication_Reserveword or 
-                  List.first(tokens) == :division_Reserveword do
+                  List.first(tokens) == :division_Reserveword or
+                  List.first(tokens) == :notEqualTo_Reserveword or 
+                  List.first(tokens) == :equalTo_Reserveword or
+                  List.first(tokens) == :lessThan_Reserveword or
+                  List.first(tokens) == :lessEqual_Reserveword  or 
+                  List.first(tokens) == :greaterThan_Reserveword or
+                  List.first(tokens) == :greaterEqual_Reserveword  do
                   next_fact_term(tokens, node_factor)
                 else #cuando no hay multiplicacion o division
                   [tokens, node_factor]; 
@@ -142,8 +148,6 @@ defmodule Parser do
           end      
       end
 
-    end
-
     def next_fact_term(tokens, node_factor)  do
       [tokens, operator] = parse_oper(tokens); #extrae el operador 1
       [tokens, next_factor] = pars_factor(tokens, operator) #extrae el operador 2
@@ -154,7 +158,13 @@ defmodule Parser do
       case tokens do
         {:error, _} -> [tokens, ""]
         _ -> if List.first(tokens) == :multiplication_Reserveword or
-                List.first(tokens) == :division_Reserveword do
+                List.first(tokens) == :division_Reserveword   or 
+                List.first(tokens) == :lessThan_Reserveword or
+                List.first(tokens) == :notEqualTo_Reserveword or 
+                List.first(tokens) == :equalTo_Reserveword or
+                List.first(tokens) == :lessEqual_Reserveword  or 
+                List.first(tokens) == :greaterThan_Reserveword or
+                List.first(tokens) == :greaterEqual_Reserveword  do
                 next_fact_term(tokens, node_factor)
               else #cuando no hay multiplicacion o division
                 [tokens, node_factor];
@@ -190,23 +200,33 @@ defmodule Parser do
             {:constant, _} -> parse_constant(tokens, :constant)
             _ -> if (List.first(tokens)) == :add_Reserveword  
                   or (List.first(tokens)) == :multiplication_Reserveword 
-                  or (List.first(tokens)) == :division_Reserveword do
+                  or (List.first(tokens)) == :division_Reserveword
+                  or (List.first(tokens)) == :notEqualTo_Reserveword
+                  or (List.first(tokens)) == :equalTo_Reserveword
+                  or (List.first(tokens)) == :lessThan_Reserveword
+                  or (List.first(tokens)) == :lessEqual_Reserveword
+                  or (List.first(tokens)) == :greaterThan_Reserveword 
+                  or (List.first(tokens)) == :greaterEqual_Reserveword do
                   [{:error, "Error de sintaxis: Falta el primer operando antes de " <> dicc(List.first(tokens)) <> "."}, ""]
                 else
                   if last_op == :addition_Reserveword 
                     or last_op == :min_Reserveword 
-                    or last_op == :multiplication_Reserveword 
-                    or last_op == :division_Reserveword do
+                    or last_op == :multiplication_Reserveword
+                    or last_op == :notEqualTo_Reserveword
+                    or last_op == :equalTo_Reserveword
+                    or last_op == :lessThan_Reserveword
+                    or last_op == :lessEqual_Reserveword
+                    or last_op == :greaterThan_Reserveword
+                    or last_op == :greaterEqual_Reserveword do
                     [{:error, "Error de sintaxis: Falta el segundo operando después de " <> dicc(last_op) <> "."}, ""]
                   else
                     [{:error, "Error de sintaxis: Se esperaba una constante u operador y se encontró " <> dicc(List.first(tokens)) <> "."}, ""]
                   end
                 end
+              end
+            end
           end
         end
-      end
-    end
-  
 
     def parse_un_op(tokens, operator, factor) do
         [tokens, {operator, dicc(operator), factor, {}}]

@@ -7,7 +7,7 @@ defmodule Generador do
     asm_string = postorden(ast, "", post_stack)
     if flag == :gen_asm, do: genera_archivo(asm_string, path), else: {:ok, asm_string}
   end
-  
+
 
   defp postorden_rec({_, value, izquierda ,derecha }, l_rec) do
     l_rec = postorden_rec(izquierda, l_rec)
@@ -31,40 +31,53 @@ defmodule Generador do
   def codigo_gen(:program, _, codigo, _) do
     """
     .p2align        4, 0x90
-    """ <> codigo 
+    """ <> codigo
   end
 
   def codigo_gen(:function, _, codigo, _) do
     """
         .globl  _main         ## -- Begin function main
     _main:                    ## @main
-    """  <> codigo 
+    """  <> codigo
   end
 
 def codigo_gen(:constant, value, codigo, post_stack) do
     if "+" in post_stack or "-" in post_stack or "*" in post_stack or "/" in post_stack or ">" in post_stack  or ">=" in post_stack
+<<<<<<< HEAD
     or "<=" in post_stack or "==" in post_stack or "!=" in post_stack do 
         if List.first(post_stack) == "+" 
         or List.first(post_stack) == "-" 
         or List.first(post_stack) == "*" 
         or List.first(post_stack) == "/" 
         or List.first(post_stack) == "~"  
+=======
+    or "<=" in post_stack do
+        if List.first(post_stack) == "+"
+        or List.first(post_stack) == "-"
+        or List.first(post_stack) == "*"
+        or List.first(post_stack) == "/"
+        or List.first(post_stack) == "~"
+>>>>>>> ea9b4f9ee7276c8e5f0f631f0069502db2a10faa
         or List.first(post_stack) == "!"
-        or List.first(post_stack) == ">" 
+        or List.first(post_stack) == ">"
         or List.first(post_stack) == "<"
         or List.first(post_stack) == ">="
+<<<<<<< HEAD
         or List.first(post_stack) == "<="
         or List.first(post_stack) == "=="
         or List.first(post_stack) == "!=" do 
+=======
+        or List.first(post_stack) == "<="do
+>>>>>>> ea9b4f9ee7276c8e5f0f631f0069502db2a10faa
             codigo <> """
                 mov $#{value},%rax
             """
-        else 
+        else
             codigo <> """
                 mov  $#{value}, %rax
                 push    %rax
             """
-        end  
+        end
     else
       codigo <> """
           movl $#{value},%eax
@@ -120,8 +133,8 @@ end
   # Operador "+"
   def codigo_gen(:add_Reserveword, _, codigo, _) do
      codigo <> """
-          pop     %rcx
-          add     %rcx, %rax
+          pop     %eax
+          add     %eax, %eax
       """
   end
 
@@ -145,7 +158,7 @@ end
 
   # # Operador binario "&&"
   def codigo_gen(:logicalAnd_Reserveword, _, codigo, _) do
-    #  Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
+    #  Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular
     #  que contiene la clausula And
     one = Regex.scan(~r/clause_and\d{1,}/, codigo)
     two = Regex.scan(~r/clause_and\d{1,}/, codigo)
@@ -165,7 +178,7 @@ end
   end
 
   # PROPUESTA DE GENERACIÓN AND
-  #def codigo_gen(:logicalAnd_Reserveword, _, codigo, _) do 
+  #def codigo_gen(:logicalAnd_Reserveword, _, codigo, _) do
     #codigo <>
     #"""
             #cmpl $0, %eax
@@ -179,12 +192,12 @@ end
 
         #_end:
     #"""
-  #end  
+  #end
 
 
   # Operador binario "||"
   def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
-    # Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular 
+    # Con Regex.scan se escanea el codigo para ver si cumple con la expresion regular
     #  que contiene la clausula Or
     one = Regex.scan(~r/clause_or\d{1,}/, codigo)
     two = Regex.scan(~r/clause_or\d{1,}/, codigo)
@@ -204,6 +217,7 @@ end
       """
   end
 
+<<<<<<< HEAD
   #PROPUESTA DE GENERACIÓN OR
   # def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
   #   codigo <> 
@@ -221,6 +235,25 @@ end
   #     """
   # end 
     
+=======
+  # PROPUESTA DE GENERACIÓN OR
+  #def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
+    #codigo <>
+      #"""
+              #cmpl $0, %eax
+              #jne   _clause2
+              #jmp   _end
+
+          #_clause2:
+              #cmpl  $0, %eax
+              #movl  $0, %eax
+              #setne %al
+
+          #_end:
+      #"""
+  #end
+
+>>>>>>> ea9b4f9ee7276c8e5f0f631f0069502db2a10faa
 
   # Operador "=="
   def codigo_gen(:equalTo_Reserveword, _, codigo, _) do
@@ -228,21 +261,21 @@ end
         pop %rbx
         cmp %rax, %rbx
         mov $0, %rax
-        sete %al 
+        sete %al
     """
   end
 
-  # Operador "!=" 
+  # Operador "!="
   def codigo_gen(:notEqualTo_Reserveword, _, codigo, _) do
     codigo <> """
         pop %rbx
         cmp %rax, %rbx
         mov $0, %rax
         setne %al
-    """    
+    """
   end
 
-   # Operador "<" 
+   # Operador "<"
   def codigo_gen(:lessThan_Reserveword, _, codigo, _) do
     codigo <> """
         pop %rbx
@@ -289,4 +322,4 @@ end
     {:only_asm, "Archivo ensamblador generado correctamente,  ir a ruta: " <> asm_path}
   end
 
-end 
+end

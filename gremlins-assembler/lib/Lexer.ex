@@ -29,7 +29,6 @@ defmodule Lexer do
      end
   end
 
-
   def lex_raw_tokens(program) when program != "" do
     #IO.puts(program)
     {token, resto} =

@@ -55,7 +55,7 @@ def codigo_gen(:constant, value, codigo, post_stack) do
         or List.first(post_stack) == ">="
         or List.first(post_stack) == "<="
         or List.first(post_stack) == "=="
-        or List.first(post_stack) == "!="do 
+        or List.first(post_stack) == "!=" do 
             codigo <> """
                 mov $#{value},%rax
             """
@@ -153,14 +153,14 @@ end
 
     codigo <>
       """
-                cmp $0, %rax
-                jne clause_and#{number}
-                jmp end_and#{number}
-            clause_and#{number}:
-                cmp $0, %rax
-                mov $0, %rax
-                setne %al
-            end_and#{number}:
+          cmp $0, %rax
+          jne clause_and#{number}
+          jmp end_and#{number}
+      clause_and#{number}:
+          cmp $0, %rax
+          mov $0, %rax
+          setne %al
+      end_and#{number}:
       """
   end
 
@@ -192,34 +192,34 @@ end
 
     codigo <>
       """
-                cmp $0, %rax
-                je clause_or#{number}
-                mov $1,%rax
-                jmp end_or#{number}
-            clause_or#{number}:
-                cmp $0, %rax
-                mov $0, %rax
-                setne %al
-            end_or#{number}:
+          cmp $0, %rax
+          je clause_or#{number}
+          mov $1,%rax
+          jmp end_or#{number}
+      clause_or#{number}:
+          cmp $0, %rax
+          mov $0, %rax
+          setne %al
+      end_or#{number}:
       """
   end
 
-  # PROPUESTA DE GENERACIÓN OR
-  #def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
-    #codigo <> 
-      #"""
-              #cmpl $0, %eax
-              #jne   _clause2
-              #jmp   _end
+  #PROPUESTA DE GENERACIÓN OR
+  # def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
+  #   codigo <> 
+  #     """
+  #         cmpl $0, %eax
+  #         jne   _clause2
+  #         jmp   _end
 
-          #_clause2:
-              #cmpl  $0, %eax
-              #movl  $0, %eax
-              #setne %al
+  #     _clause2:
+  #         cmpl  $0, %eax
+  #         movl  $0, %eax
+  #         setne %al
 
-          #_end:
-      #"""
-  #end 
+  #     _end:
+  #     """
+  # end 
     
 
   # Operador "=="

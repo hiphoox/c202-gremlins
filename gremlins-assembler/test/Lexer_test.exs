@@ -124,7 +124,21 @@ defmodule LexerTest do
       :close_brace]}
   end
 
-  #test "Prueba 1-9 : Aceptando operador unario  " do
+  test "Prueba 1-8 : Aceptando operador unario ~ " do
+    assert Lexer.scan_word(File.read!("test/codigoc/bitwise_zero.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      :bitewise_Reserveword,
+      {:constant, 0},
+      :semicolon,
+      :close_brace]}
+  end
+
+  #test "Prueba 1-9 : Aceptando operador unario  !" do
     #assert Lexer.scan_word(File.read!("test/codigoc/not_ten.c"), :no_output) == {:ok, [
       #:int_Reserveword,
       #:main_Reserveword,
@@ -134,9 +148,189 @@ defmodule LexerTest do
       #:return_Reserveword,
       #:logicalNeg_Reserveword,
       #{:constant, 10},
+      #{:constant, 0},
       #:semicolon,
       #:close_brace]}
   #end
 
+  test "Prueba 1-10 : Aceptando operador binario +  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/adicion.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :add_Reserveword,
+      {:constant, 2},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario -  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/resta.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 3},
+      :negation_Reserveword,
+      {:constant, 2},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario *  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/multiplicacion.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :multiplication_Reserveword,
+      {:constant, 2},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario /  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/division.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 4},
+      :division_Reserveword,
+      {:constant, 2},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario &&  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/andLogico.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :logicalAnd_Reserveword,
+      {:constant, 1},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario ||  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/orLogico.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :logicalOr_Reserveword,
+      {:constant, 1},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario ==  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/equal.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :equalTo_Reserveword,
+      {:constant, 1},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario !=  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/notEqual.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :notEqualTo_Reserveword,
+      {:constant, 2},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario <  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/lessThan.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :lessThan_Reserveword,
+      {:constant, 2},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario <=  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/lessEqual.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 1},
+      :lessEqual_Reserveword,
+      {:constant, 1},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario >  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/greaterThan.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 2},
+      :greaterThan_Reserveword,
+      {:constant, 1},
+      :semicolon,
+      :close_brace]}
+  end
+
+  test "Prueba 1-10 : Aceptando operador binario >=  " do
+    assert Lexer.scan_word(File.read!("test/codigoc/greaterEqual.c"), :no_output) == {:ok, [
+      :int_Reserveword,
+      :main_Reserveword,
+      :open_par,
+      :close_par,
+      :open_brace,
+      :return_Reserveword,
+      {:constant, 2},
+      :greaterEqual_Reserveword,
+      {:constant, 1},
+      :semicolon,
+      :close_brace]}
+  end
 
 end

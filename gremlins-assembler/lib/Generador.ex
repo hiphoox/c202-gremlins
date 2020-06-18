@@ -43,32 +43,19 @@ defmodule Generador do
 
 def codigo_gen(:constant, value, codigo, post_stack) do
     if "+" in post_stack or "-" in post_stack or "*" in post_stack or "/" in post_stack or ">" in post_stack  or ">=" in post_stack
-<<<<<<< HEAD
     or "<=" in post_stack or "==" in post_stack or "!=" in post_stack do 
         if List.first(post_stack) == "+" 
         or List.first(post_stack) == "-" 
         or List.first(post_stack) == "*" 
         or List.first(post_stack) == "/" 
         or List.first(post_stack) == "~"  
-=======
-    or "<=" in post_stack do
-        if List.first(post_stack) == "+"
-        or List.first(post_stack) == "-"
-        or List.first(post_stack) == "*"
-        or List.first(post_stack) == "/"
-        or List.first(post_stack) == "~"
->>>>>>> ea9b4f9ee7276c8e5f0f631f0069502db2a10faa
         or List.first(post_stack) == "!"
         or List.first(post_stack) == ">"
         or List.first(post_stack) == "<"
         or List.first(post_stack) == ">="
-<<<<<<< HEAD
         or List.first(post_stack) == "<="
         or List.first(post_stack) == "=="
         or List.first(post_stack) == "!=" do 
-=======
-        or List.first(post_stack) == "<="do
->>>>>>> ea9b4f9ee7276c8e5f0f631f0069502db2a10faa
             codigo <> """
                 mov $#{value},%rax
             """
@@ -217,7 +204,6 @@ end
       """
   end
 
-<<<<<<< HEAD
   #PROPUESTA DE GENERACIÓN OR
   # def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
   #   codigo <> 
@@ -235,25 +221,6 @@ end
   #     """
   # end 
     
-=======
-  # PROPUESTA DE GENERACIÓN OR
-  #def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
-    #codigo <>
-      #"""
-              #cmpl $0, %eax
-              #jne   _clause2
-              #jmp   _end
-
-          #_clause2:
-              #cmpl  $0, %eax
-              #movl  $0, %eax
-              #setne %al
-
-          #_end:
-      #"""
-  #end
-
->>>>>>> ea9b4f9ee7276c8e5f0f631f0069502db2a10faa
 
   # Operador "=="
   def codigo_gen(:equalTo_Reserveword, _, codigo, _) do

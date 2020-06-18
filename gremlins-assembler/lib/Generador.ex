@@ -118,8 +118,8 @@ end
   # Operador "+"
   def codigo_gen(:add_Reserveword, _, codigo, _) do
      codigo <> """
-        pop     %rax
-        add     %rax, %rcx
+        pop     %rcx
+        add     %rcx, %rax
       """
   end
 

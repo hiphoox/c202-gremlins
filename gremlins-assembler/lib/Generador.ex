@@ -1,9 +1,7 @@
 defmodule Generador do
 
   def code_gen(ast, flag, path) do
-    IO.inspect ast
     post_stack = postorden_rec(ast, [])
-    IO.inspect post_stack
     asm_string = postorden(ast, "", post_stack)
     if flag == :gen_asm, do: genera_archivo(asm_string, path), else: {:ok, asm_string}
   end
@@ -43,19 +41,17 @@ defmodule Generador do
 
 def codigo_gen(:constant, value, codigo, post_stack) do
     if "+" in post_stack or "-" in post_stack or "*" in post_stack or "/" in post_stack or ">" in post_stack  or ">=" in post_stack
-    or "<=" in post_stack or "==" in post_stack or "!=" in post_stack do 
-        if List.first(post_stack) == "+" 
-        or List.first(post_stack) == "-" 
-        or List.first(post_stack) == "*" 
-        or List.first(post_stack) == "/" 
-        or List.first(post_stack) == "~"  
+    or "<=" in post_stack do
+        if List.first(post_stack) == "+"
+        or List.first(post_stack) == "-"
+        or List.first(post_stack) == "*"
+        or List.first(post_stack) == "/"
+        or List.first(post_stack) == "~"
         or List.first(post_stack) == "!"
         or List.first(post_stack) == ">"
         or List.first(post_stack) == "<"
         or List.first(post_stack) == ">="
-        or List.first(post_stack) == "<="
-        or List.first(post_stack) == "=="
-        or List.first(post_stack) == "!=" do 
+        or List.first(post_stack) == "<="do
             codigo <> """
                 mov $#{value},%rax
             """
@@ -204,6 +200,7 @@ end
       """
   end
 
+<<<<<<< HEAD
   #PROPUESTA DE GENERACIÓN OR
   # def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
   #   codigo <> 
@@ -221,6 +218,25 @@ end
   #     """
   # end 
     
+=======
+  # PROPUESTA DE GENERACIÓN OR
+  #def codigo_gen(:logicalOr_Reserveword, _, codigo, _) do
+    #codigo <>
+      #"""
+              #cmpl $0, %eax
+              #jne   _clause2
+              #jmp   _end
+
+          #_clause2:
+              #cmpl  $0, %eax
+              #movl  $0, %eax
+              #setne %al
+
+          #_end:
+      #"""
+  #end
+
+>>>>>>> 03ca8b74ae4875b99b38d7540244934bcfe3e37e
 
   # Operador "=="
   def codigo_gen(:equalTo_Reserveword, _, codigo, _) do
